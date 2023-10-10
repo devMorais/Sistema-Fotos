@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block corpo %}
+
+{% include 'menu.html' %}
+
+<div class="conteudo">
+    {% include 'topo.html' %}
+    <main>
+        {% block conteudo %}  
+        
+        {% endblock %}
+    </main>
+    {% include 'rodape.html' %}
+</div>
+{% endblock %}

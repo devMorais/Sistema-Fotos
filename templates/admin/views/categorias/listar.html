@@ -1,0 +1,73 @@
+{% extends "dashboard.html" %}
+{% block conteudo %}  
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body">
+            <br>
+            <div class="text-end">
+                <a href="{{url('admin/categorias/cadastrar')}}" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Cadastrar</a>  
+            </div>
+            <h5 class="card-title">Coleções</h5>                               
+            <div class="pagetitle">
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Listagem das coleções</li>
+                    </ol>
+                </nav>
+            </div>
+             <div class="row justify-content-between">
+                <div class="col-auto">
+                    <span class="badge rounded-pill bg-primary">Total Geral: {{total.total}}</span>
+                </div>
+                <div class="col-auto">
+                    <span class="badge rounded-pill bg-success">Total Ativos: {{total.ativo}}</span>
+                </div>
+                <div class="col-auto">
+                    <span class="badge rounded-pill bg-danger">Total Inativos: {{total.inativo}}</span>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-bordered border-primary table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Titulo</th>
+                            <th scope="col">Texto</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for categoria in categorias %}
+                        <tr>
+                            <th scope="row">{{categoria.id}}</th>
+                            <td>{{categoria.titulo}}</td>
+                            <td><small>{{categoria.texto}}</small></td>
+                            <td class="text-center">
+                                {% if categoria.status == 1 %}
+                                <i class="bi bi-circle-fill text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Ativo"></i>
+                                {% else %}
+                                <i class="bi bi-circle-fill text-danger" tooltip="tooltip" title="Inativo"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="icon">
+                                  
+                                    <a href="{{ url('admin/categorias/deletar/' ~ categoria.id) }}" data-confirm="Confirma a exclusão?"> <i class="bi bi-trash2 bi-lg"></i></a>                                
+                                    <a href="{{ url('admin/categorias/editar/' ~ categoria.id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                        <i class="bi bi-pencil-square bi-lg"></i> <!-- Ícone de lápis quadrado, maior -->
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
