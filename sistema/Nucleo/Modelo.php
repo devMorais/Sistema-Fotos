@@ -10,7 +10,7 @@ use sistema\Nucleo\Mensagem;
  *
  * @author Fernando
  */
-class Modelo
+abstract class Modelo
 {
 
     protected $dados;
@@ -180,7 +180,6 @@ class Modelo
     {
         try {
 
-
             $query = "DELETE FROM " . $this->tabela . " WHERE {$termos}";
 
             $stmt = Conexao::getInstancia()->prepare($query);
@@ -191,6 +190,16 @@ class Modelo
             $this->erro = $ex->getMessage();
             return null;
         }
+    }
+
+    public function deletar()
+    {
+        if (empty($this->id)) {
+            return false;
+        }
+
+        $deletar = $this->apagar("id = {$this->id}");
+        return $deletar;
     }
 
     public function total(): int

@@ -21,8 +21,8 @@ class AdminProdutos extends AdminControlador
             'produtos' => $produto->busca()->ordem('status ASC, id DESC')->resultado(true),
             'total' => [
                 'total' => $produto->total(),
-                'ativo' => $produto->total('status = 1'),
-                'inativo' => $produto->total('status = 0')
+                'ativo' => $produto->busca('status = 1')->total(),
+                'inativo' => $produto->busca('status = 0')->total()
             ]
         ]);
     }
@@ -48,7 +48,7 @@ class AdminProdutos extends AdminControlador
         }
 
         echo $this->template->renderizar('produtos/formulario.html', [
-            'categorias' => (new CategoriaModelo())->busca()
+            'categorias' => (new CategoriaModelo())->busca()->resultado(true)
         ]);
     }
 
@@ -75,7 +75,7 @@ class AdminProdutos extends AdminControlador
 
         echo $this->template->renderizar('produtos/formulario.html', [
             'produto' => $produto,
-            'categorias' => (new CategoriaModelo())->busca()
+            'categorias' => (new CategoriaModelo())->busca()->resultado(true)
         ]);
     }
 
@@ -87,7 +87,7 @@ class AdminProdutos extends AdminControlador
                 $this->mensagem->erro('O produto que você está tentando deletar não existe.')->flash();
                 Helpers::redirecionar('admin/produtos/listar');
             } else {
-                if ($produto->apagar("id = {$id}")) {
+                if ($produto->deletar()) {
                     $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
                     Helpers::redirecionar('admin/produtos/listar');
                 } else {
