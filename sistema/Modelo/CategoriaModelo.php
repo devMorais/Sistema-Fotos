@@ -54,7 +54,14 @@ class CategoriaModelo
         $stmt->execute([$dados['titulo'], $dados['texto'], $dados['status']]);
     }
 
-     public function total(?string $termo = null): int
+    public function deletar(int $id): void
+    {
+        $query = "DELETE FROM categorias WHERE id = {$id}";
+        $stmt = Conexao::getInstancia()->prepare($query);
+        $stmt->execute();
+    }
+
+    public function total(?string $termo = null): int
     {
         $termo = ($termo ? "WHERE {$termo}" : '');
 

@@ -33,6 +33,8 @@ class AdminProdutos extends AdminControlador
 
         if (isset($dados)) {
             (new ProdutoModelo())->armazenar($dados);
+            $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+
             Helpers::redirecionar('admin/produtos/listar');
         }
 
@@ -48,6 +50,7 @@ class AdminProdutos extends AdminControlador
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
             (new ProdutoModelo())->atualizar($dados, $id);
+            $this->mensagem->sucesso('Edição realizada com êxito.')->flash();
             Helpers::redirecionar('admin/produtos/listar');
         }
 
@@ -60,7 +63,7 @@ class AdminProdutos extends AdminControlador
     public function deletar(int $id): void
     {
         (new ProdutoModelo())->deletar($id);
-
+        $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
         Helpers::redirecionar('admin/produtos/listar');
     }
 }

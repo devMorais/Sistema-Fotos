@@ -12,11 +12,12 @@ use sistema\Nucleo\Conexao;
 class ProdutoModelo
 {
 
-    public function busca(?string $termo = null): array
+    public function busca(?string $termo = null, ?string $ordem = null): array
     {
         $termo = ($termo ? "WHERE {$termo}" : '');
+        $ordem = ($ordem ? "ORDER BY {$ordem}" : '');
 
-        $query = "SELECT * FROM produtos {$termo} ";
+        $query = "SELECT * FROM produtos {$termo} {$ordem} ";
         $stmt = Conexao::getInstancia()->query($query);
         $resultado = $stmt->fetchAll();
         return $resultado;

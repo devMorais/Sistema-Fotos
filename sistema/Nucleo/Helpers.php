@@ -2,8 +2,20 @@
 
 namespace sistema\Nucleo;
 
+use sistema\Nucleo\Sessao;
+
 class Helpers
 {
+
+    public static function flash(): ?string
+    {
+        $sessao = new Sessao();
+
+        if ($flash = $sessao->flash()) {
+            echo $flash;
+        }
+        return null;
+    }
 
     /**
      * Redireciona o usuário para uma URL especificada ou a URL padrão.

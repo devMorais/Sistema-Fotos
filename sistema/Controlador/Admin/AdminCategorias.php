@@ -32,6 +32,7 @@ class AdminCategorias extends AdminControlador
 
         if (isset($dados)) {
             (new CategoriaModelo())->armazenar($dados);
+            $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
             Helpers::redirecionar('admin/categorias/listar');
         }
 
@@ -46,6 +47,7 @@ class AdminCategorias extends AdminControlador
 
         if (isset($dados)) {
             (new CategoriaModelo())->atualizar($dados, $id);
+            $this->mensagem->sucesso('Edição realizada com êxito.')->flash();
 
             Helpers::redirecionar('admin/categorias/listar');
         }
@@ -58,6 +60,7 @@ class AdminCategorias extends AdminControlador
     public function deletar(int $id): void
     {
         (new CategoriaModelo())->deletar($id);
+        $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
 
         Helpers::redirecionar('admin/categorias/listar');
     }

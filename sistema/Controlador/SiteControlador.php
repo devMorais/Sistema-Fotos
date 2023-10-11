@@ -33,7 +33,7 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
-        $produtos = (new ProdutoModelo())->busca();
+        $produtos = (new ProdutoModelo())->busca(null, 'rand()');
 
         echo $this->template->renderizar('index.html', [
             'produtos' => $produtos,
