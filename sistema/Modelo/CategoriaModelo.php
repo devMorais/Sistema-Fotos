@@ -3,23 +3,19 @@
 namespace sistema\Modelo;
 
 use sistema\Nucleo\Conexao;
+use sistema\Nucleo\Modelo;
 
 /**
  * Classe - Categoria Modelo
  *
  * @author Fernando
  */
-class CategoriaModelo
+class CategoriaModelo extends Modelo
 {
 
-    public function busca(?string $termo = null): array
+    public function __construct()
     {
-        $termo = ($termo ? "WHERE {$termo}" : '');
-
-        $query = "SELECT * FROM categorias {$termo} ";
-        $stmt = Conexao::getInstancia()->query($query);
-        $resultado = $stmt->fetchAll();
-        return $resultado;
+        parent::__construct('categorias');
     }
 
     public function buscaPorId(int $id): bool|object

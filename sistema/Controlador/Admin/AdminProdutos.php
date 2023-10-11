@@ -18,7 +18,7 @@ class AdminProdutos extends AdminControlador
     {
         $produto = new ProdutoModelo();
         echo $this->template->renderizar('produtos/listar.html', [
-            'produtos' => $produto->busca(),
+            'produtos' => $produto->busca()->ordem('status ASC, id DESC')->resultado(true),
             'total' => [
                 'total' => $produto->total(),
                 'ativo' => $produto->total('status = 1'),

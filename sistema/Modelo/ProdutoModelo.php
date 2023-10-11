@@ -3,24 +3,19 @@
 namespace sistema\Modelo;
 
 use sistema\Nucleo\Conexao;
+use sistema\Nucleo\Modelo;
 
 /**
  * Description of ProdutoModelo
  *
  * @author Fernando
  */
-class ProdutoModelo
+class ProdutoModelo extends Modelo
 {
 
-    public function busca(?string $termo = null, ?string $ordem = null): array
+    public function __construct()
     {
-        $termo = ($termo ? "WHERE {$termo}" : '');
-        $ordem = ($ordem ? "ORDER BY {$ordem}" : '');
-
-        $query = "SELECT * FROM produtos {$termo} {$ordem} ";
-        $stmt = Conexao::getInstancia()->query($query);
-        $resultado = $stmt->fetchAll();
-        return $resultado;
+        parent::__construct('produtos');
     }
 
     public function buscaPorId(int $id): bool|object
