@@ -32,10 +32,19 @@ class AdminProdutos extends AdminControlador
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if (isset($dados)) {
-            (new ProdutoModelo())->armazenar($dados);
-            $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
 
-            Helpers::redirecionar('admin/produtos/listar');
+            $produto = new ProdutoModelo();
+
+            $produto->titulo = $dados['titulo'];
+            $produto->categoria_id = $dados['categoria_id'];
+            $produto->texto = $dados['texto'];
+            $produto->status = $dados['status'];
+
+            if ($produto->salvar()) {
+                $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+
+                Helpers::redirecionar('admin/produtos/listar');
+            }
         }
 
         echo $this->template->renderizar('produtos/formulario.html', [
@@ -49,9 +58,19 @@ class AdminProdutos extends AdminControlador
 
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
-            (new ProdutoModelo())->atualizar($dados, $id);
-            $this->mensagem->sucesso('Edição realizada com êxito.')->flash();
-            Helpers::redirecionar('admin/produtos/listar');
+
+            $produto = (new ProdutoModelo())->buscaPorId($id);
+
+            $produto->titulo = $dados['titulo'];
+            $produto->categoria_id = $dados['categoria_id'];
+            $produto->texto = $dados['texto'];
+            $produto->status = $dados['status'];
+
+            if ($produto->salvar()) {
+                $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
+
+                Helpers::redirecionar('admin/produtos/listar');
+            }
         }
 
         echo $this->template->renderizar('produtos/formulario.html', [
@@ -62,8 +81,20 @@ class AdminProdutos extends AdminControlador
 
     public function deletar(int $id): void
     {
-        (new ProdutoModelo())->deletar($id);
-        $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
-        Helpers::redirecionar('admin/produtos/listar');
+        if (is_int($id)) {
+            $produto = (new ProdutoModelo())->buscaPorId($id);
+            if (!$produto) {
+                $this->mensagem->erro('O produto que você está tentando deletar não existe.')->flash();
+                Helpers::redirecionar('admin/produtos/listar');
+            } else {
+                if ($produto->apagar("id = {$id}")) {
+                    $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
+                    Helpers::redirecionar('admin/produtos/listar');
+                } else {
+                    $this->mensagem->erro($produto->erro())->flash();
+                    Helpers::redirecionar('admin/produtos/listar');
+                }
+            }
+        }
     }
 }

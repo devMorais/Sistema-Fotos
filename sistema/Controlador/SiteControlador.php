@@ -24,7 +24,7 @@ class SiteControlador extends Controlador
      */
     public function categorias(): array
     {
-        return (new CategoriaModelo())->busca();
+        return (new CategoriaModelo())->busca()->resultado(true);
     }
 
     /**
@@ -33,7 +33,7 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
-        $produtos = (new ProdutoModelo())->busca(null, 'rand()');
+        $produtos = (new ProdutoModelo())->busca("status = 1")->resultado(true);
 
         echo $this->template->renderizar('index.html', [
             'produtos' => $produtos,
@@ -49,7 +49,7 @@ class SiteControlador extends Controlador
     {
         $busca = filter_input(INPUT_POST, 'busca', FILTER_DEFAULT);
         if (isset($busca)) {
-            $produtos = (new ProdutoModelo())->pesquisa($busca);
+            $produtos = (new ProdutoModelo())->busca("status = 1 AND titulo LIKE '%{$busca}%'")->resultado(true);
             foreach ($produtos as $produto) {
                 echo "<li class='list-group-item'><a href=" . Helpers::url('produto/') . $produto->id . ">$produto->titulo</a></li>";
             }
@@ -82,7 +82,7 @@ class SiteControlador extends Controlador
      */
     public function categoriaPorId(int $id): void
     {
-        $produtos = (new CategoriaModelo())->produtos($id);
+        $produtos = (new CategoriaModelo())->buscaPorId($id);
 
         echo $this->template->renderizar('categoria.html', [
             'produtos' => $produtos,

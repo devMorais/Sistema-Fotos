@@ -6,7 +6,7 @@ use sistema\Modelo\CategoriaModelo;
 use sistema\Nucleo\Helpers;
 
 /**
- * Classe - Dashboard do painel administrativo.
+ * Classe Controlodora - AdminCategorias
  *
  * @author Fernando
  */
@@ -31,12 +31,24 @@ class AdminCategorias extends AdminControlador
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if (isset($dados)) {
-            (new CategoriaModelo())->armazenar($dados);
-            $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
-            Helpers::redirecionar('admin/categorias/listar');
+
+            $categoria = new CategoriaModelo();
+
+            $categoria->titulo = $dados['titulo'];
+            $categoria->categoria_id = $dados['categoria_id'];
+            $categoria->texto = $dados['texto'];
+            $categoria->status = $dados['status'];
+
+            if ($categoria->salvar()) {
+                $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+
+                Helpers::redirecionar('admin/categorias/listar');
+            }
         }
 
-        echo $this->template->renderizar('categorias/formulario.html', []);
+        echo $this->template->renderizar('categorias/formulario.html', [
+            'categorias' => (new CategoriaModelo())->busca()
+        ]);
     }
 
     public function editar(int $id): void
@@ -44,24 +56,44 @@ class AdminCategorias extends AdminControlador
         $categoria = (new CategoriaModelo())->buscaPorId($id);
 
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
         if (isset($dados)) {
-            (new CategoriaModelo())->atualizar($dados, $id);
-            $this->mensagem->sucesso('Edição realizada com êxito.')->flash();
 
-            Helpers::redirecionar('admin/categorias/listar');
+            $categoria = (new CategoriaModelo())->buscaPorId($id);
+
+            $categoria->titulo = $dados['titulo'];
+            $categoria->categoria_id = $dados['categoria_id'];
+            $categoria->texto = $dados['texto'];
+            $categoria->status = $dados['status'];
+
+            if ($categoria->salvar()) {
+                $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
+
+                Helpers::redirecionar('admin/categorias/listar');
+            }
         }
 
         echo $this->template->renderizar('categorias/formulario.html', [
             'categoria' => $categoria
+           
         ]);
     }
 
     public function deletar(int $id): void
     {
-        (new CategoriaModelo())->deletar($id);
-        $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
-
-        Helpers::redirecionar('admin/categorias/listar');
+        if (is_int($id)) {
+            $categoria = (new CategoriaModelo())->buscaPorId($id);
+            if (!$categoria) {
+                $this->mensagem->erro('O produto que você está tentando deletar não existe.')->flash();
+                Helpers::redirecionar('admin/categorias/listar');
+            } else {
+                if ($categoria->apagar("id = {$id}")) {
+                    $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
+                    Helpers::redirecionar('admin/categorias/listar');
+                } else {
+                    $this->mensagem->erro($categoria->erro())->flash();
+                    Helpers::redirecionar('admin/categorias/listar');
+                }
+            }
+        }
     }
 }
