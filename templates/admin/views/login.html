@@ -1,50 +1,34 @@
 {% extends "base.html" %}
 {% block corpo %}
-<main>
-    <div class="container">
-        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-                        <div class="d-flex justify-content-center py-4">
-                            <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                <img src="assets/img/logo.png" alt="">
-                                <span class="d-none d-lg-block">ModaPraia</span>
-                            </a>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="pt-4 pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-4">Painel - Administrativo</h5>
-                                    <p class="text-center small">Digite seu nome de usuário e senha para fazer login</p>
-                                </div>
-                                <form class="row g-3 needs-validation" novalidate>
-                                    <div class="col-12">
-                                        <label for="yourUsername" class="form-label">E-mail</label>
-                                        <div class="input-group has-validation">
-                                            <input type="text" name="username" class="form-control" id="yourUsername" required>
-                                            <div class="invalid-feedback">Por favor insira seu e-mail.</div>
-                                        </div>
-                                    </div>
+<div class="fundo15 p-3">
+    <div class="col-md-6 col-sm-6 col-lg-4 mx-auto">
+        <div class="card mt-5">
+            <div class="card-body">
+                <hr>
+                <h1 class="h3 mb-3 text-center">Painel Administrativo</h1>
+                <p class="text-center">Informe seu login e senha para entrar no sistema.</p>
 
-                                    <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Senha</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword" required>
-                                        <div class="invalid-feedback">Por favor, insira sua senha!</div>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100" type="submit">Login</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                {{ flash() }}
+
+                <form action="{{url('admin/login')}}" method="post">      
+                    <div class="form-floating mb-3">
+                        <input type="text" name="email" id="email" class="form-control" placeholder="E-mail">
+                        <label for="email">E-mail</label>
                     </div>
-                </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" name="senha" id="senha" class="form-control"  placeholder="Senha">
+                        <label for="senha">Senha</label>
+                    </div>
+
+                    <button class="w-100 btn btn-lg btn-dark mb-5" type="submit">Entrar</button>
+                    <div class="text-center">
+                        <small class="text-muted"> &copy; {{ "now"|date("Y") }} - {{constant('SITE_NOME')}}</small>
+                    </div>
+                </form>
             </div>
-
-        </section>
-
+        </div>
     </div>
-</main><!-- End #main -->
+</div>
+
 {% endblock %}

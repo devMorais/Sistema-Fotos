@@ -7,13 +7,22 @@ use sistema\Modelo\CategoriaModelo;
 use sistema\Nucleo\Helpers;
 
 /**
- * Classe Controloladora de Admin Produtos
+ * Classe Controladora de Administração de Produtos
+ *
+ * Esta classe é responsável por lidar com operações administrativas relacionadas a produtos.
+ * Ela estende a classe AdminControlador.
  *
  * @author Fernando
  */
 class AdminProdutos extends AdminControlador
 {
 
+    /**
+     * Listar produtos no painel de administração.
+     *
+     * Este método recupera uma lista de produtos, a contagem total, a contagem de produtos ativos
+     * e a contagem de produtos inativos, e depois renderiza um modelo para exibir essa informação.
+     */
     public function listar(): void
     {
         $produto = new ProdutoModelo();
@@ -27,12 +36,17 @@ class AdminProdutos extends AdminControlador
         ]);
     }
 
+    /**
+     * Cadastrar um novo produto no painel de administração.
+     *
+     * Este método lida com a criação de um novo produto. Ele processa os dados do formulário enviado,
+     * cria um novo produto e o salva no banco de dados. Ele também trata mensagens de sucesso e falha.
+     */
     public function cadastrar()
     {
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if (isset($dados)) {
-
             $produto = new ProdutoModelo();
 
             $produto->titulo = $dados['titulo'];
@@ -52,13 +66,20 @@ class AdminProdutos extends AdminControlador
         ]);
     }
 
+    /**
+     * Editar um produto no painel de administração.
+     *
+     * Este método permite a edição de um produto existente. Ele recupera os detalhes do produto,
+     * processa os dados do formulário enviado, atualiza o produto e trata mensagens de sucesso e falha.
+     *
+     * @param int $id O ID do produto a ser editado.
+     */
     public function editar(int $id): void
     {
         $produto = (new ProdutoModelo())->buscaPorId($id);
 
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
-
             $produto = (new ProdutoModelo())->buscaPorId($id);
 
             $produto->titulo = $dados['titulo'];
@@ -79,6 +100,13 @@ class AdminProdutos extends AdminControlador
         ]);
     }
 
+    /**
+     * Deletar um produto no painel de administração.
+     *
+     * Este método lida com a exclusão de um produto pelo ID, mostrando mensagens apropriadas com base no resultado.
+     *
+     * @param int $id O ID do produto a ser excluído.
+     */
     public function deletar(int $id): void
     {
         if (is_int($id)) {
