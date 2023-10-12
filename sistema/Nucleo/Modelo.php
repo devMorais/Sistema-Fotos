@@ -6,7 +6,7 @@ use sistema\Nucleo\Conexao;
 use sistema\Nucleo\Mensagem;
 
 /**
- * Description of Modelo
+ * Classe Modelo
  *
  * @author Fernando
  */

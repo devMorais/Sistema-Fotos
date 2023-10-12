@@ -17,6 +17,10 @@ try {
 
     SimpleRouter::group(['namespace' => 'Admin'], function () {
 
+        //ADMIN LOGIN
+        SimpleRouter::match(['get', 'post'], URL_ADMIN . 'login', 'AdminLogin@login');
+
+        //DASHBOARD
         SimpleRouter::get(URL_ADMIN . 'dashboard', 'AdminDashboard@dashboard');
 
         //ADMIN PRODUTOS

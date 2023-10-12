@@ -7,7 +7,7 @@ use sistema\Modelo\CategoriaModelo;
 use sistema\Nucleo\Helpers;
 
 /**
- * Classe - Dashboard do painel administrativo.
+ * Classe Controloladora de Admin Produtos
  *
  * @author Fernando
  */
