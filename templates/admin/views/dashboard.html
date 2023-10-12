@@ -50,8 +50,15 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{produto.total}}</h6>
-                                            <span class="badge rounded-pill bg-success">Ativos {{produto.ativo}}</span>
-                                            <span class="badge rounded-pill bg-danger">Desativados {{produto.inativo}}</span>
+
+                                            <div class="row">
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{produto.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{produto.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -83,8 +90,14 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{categoria.total}}</h6>
-                                            <span class="badge rounded-pill bg-success">Ativos {{categoria.ativo}}</span>
-                                            <span class="badge rounded-pill bg-danger">Desativados {{categoria.inativo}}</span>
+                                             <div class="row">
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{categoria.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{categoria.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                </div>
+                                            </div>
 
 
                                         </div>
@@ -117,10 +130,14 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{usuario.total}}</h6>
-                                            <span class="badge rounded-pill bg-success">Ativos {{usuario.ativo}}</span>
-                                            <span class="badge rounded-pill bg-danger">Desativados {{usuario.inativo}}</span>
-
-
+                                             <div class="row">
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{usuario.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{usuario.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 

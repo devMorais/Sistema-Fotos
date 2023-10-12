@@ -27,8 +27,8 @@ class AdminCategorias extends AdminControlador
             'categorias' => $categoria->busca()->ordem('status ASC, titulo ASC')->resultado(true),
             'total' => [
                 'total' => $categoria->total(),
-                'ativo' => $categoria->total('status = 1'),
-                'inativo' => $categoria->total('status = 0')
+                'ativo' => $categoria->busca('status = 1')->total(),
+                'inativo' => $categoria->busca('status = 0')->total(),
             ]
         ]);
     }
