@@ -67,6 +67,9 @@ class UsuarioModelo extends Modelo
             return false;
         }
 
+        $usuario->ultimo_login = date('Y-m-d H:i:s');
+        $usuario->salvar();
+
         (new Sessao())->criar('usuarioId', $usuario->id);
 
         $this->mensagem->sucesso("{$usuario->nome}, seja bem vindo(a) ao painel de controle!")->flash();

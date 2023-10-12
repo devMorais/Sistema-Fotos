@@ -5,6 +5,7 @@ namespace sistema\Controlador\Admin;
 use sistema\Nucleo\Controlador;
 use sistema\Nucleo\Helpers;
 use sistema\Modelo\UsuarioModelo;
+use sistema\Controlador\UsuarioControlador;
 
 /**
  * Classe AdminLogin
@@ -31,6 +32,13 @@ class AdminLogin extends Controlador
      */
     public function login(): void
     {
+
+        $usuario = UsuarioControlador::usuario();
+
+        if ($usuario && $usuario->level == 3) {
+            Helpers::redirecionar('admin/dashboard');
+        }
+
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
             if ($this->checarDadosLogin($dados)) {

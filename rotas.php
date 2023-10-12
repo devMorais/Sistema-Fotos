@@ -22,6 +22,7 @@ try {
 
         //DASHBOARD
         SimpleRouter::get(URL_ADMIN . 'dashboard', 'AdminDashboard@dashboard');
+        SimpleRouter::get(URL_ADMIN . 'sair', 'AdminDashboard@sair');
 
         //ADMIN PRODUTOS
         SimpleRouter::get(URL_ADMIN . 'produtos/listar', 'AdminProdutos@listar');
