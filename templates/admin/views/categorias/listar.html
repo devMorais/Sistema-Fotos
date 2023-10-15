@@ -17,7 +17,7 @@
                 </nav>
             </div>
             {{ flash() }}
-             <div class="row justify-content-between">
+            <div class="row justify-content-between">
                 <div class="col-auto">
                     <span class="badge rounded-pill bg-primary">Total Geral: {{total.total}}</span>
                 </div>
@@ -39,14 +39,15 @@
                             <th scope="col">Texto</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ação</th>
+                            <th scope="col">Info</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for categoria in categorias %}
                         <tr>
                             <th scope="row">{{categoria.id}}</th>
-                            <td>{{categoria.titulo}}</td>
-                            <td><small>{{categoria.texto}}</small></td>
+                            <td>{{resumirTexto(categoria.titulo, 30, '...')}}</td>
+                            <td><small>{{resumirTexto(categoria.texto, 50, '...')}}</small></td>
                             <td class="text-center">
                                 {% if categoria.status == 1 %}
                                 <i class="bi bi-circle-fill text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Ativo"></i>
@@ -54,17 +55,44 @@
                                 <i class="bi bi-circle-fill text-danger" tooltip="tooltip" title="Inativo"></i>
                                 {% endif %}
                             </td>
-                            <td>
-                                <div class="icon">
-                                  
-                                    <a href="{{ url('admin/categorias/deletar/' ~ categoria.id) }}" data-confirm="Confirma a exclusão?"> <i class="bi bi-trash2 bi-lg"></i></a>                                
-                                    <a href="{{ url('admin/categorias/editar/' ~ categoria.id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-                                        <i class="bi bi-pencil-square bi-lg"></i> <!-- Ícone de lápis quadrado, maior -->
-                                    </a>
-                                </div>
+                            <td class="text-center">
+                                <a href="{{ url('admin/categorias/editar/'~categoria.id) }}" tooltip="tooltip" title="Editar">
+                                    <i class="fa-solid fa-pen m-1"></i>
+                                </a>
+
+                                <a href="{{ url('admin/categorias/deletar/' ~ categoria.id) }}" data-confirm="Confirma a exclusão?">  <i class="bi bi-trash h6 text-danger m-1" data-toggle="tooltip" data-placement="top" title="Excluir"></i></a>                                
+
+                            </td>
+
+                            <td class="text-center">
+                                <a href="#info{{categoria.id}}" data-bs-toggle="offcanvas" tooltip="tooltip" title="Status">
+                                    <i class="fa-solid fa-arrow-trend-up"></i>
+                                </a>
                             </td>
                         </tr>
-                        {% endfor %}
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="info{{categoria.id}}">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">{{categoria.titulo}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    Cadastrado em: {{ categoria.cadastrado_em|date("d/m/Y H:i:s") }}
+                                </li>
+                                <li class="list-group-item">
+                                    Atualizado em: {{categoria.atualizado_em}}
+                                </li>
+                                <li class="list-group-item">
+                                    Última visita em: {{categoria.ultima_visita_em}}
+                                </li>
+                                <li class="list-group-item">
+                                    Cadastrado por: <b>{{categoria.usuario.nome}}</b>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -72,3 +100,4 @@
     </div>
 </main>
 {% endblock %}
+

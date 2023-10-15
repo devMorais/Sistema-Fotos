@@ -24,6 +24,12 @@ class AdminDashboard extends AdminControlador
         $categoria = new CategoriaModelo();
 
         echo $this->template->renderizar('dashboard.html', [
+            'posts' => [
+                'posts' => $produto->busca()->ordem('id DESC')->limite(5)->resultado(true),
+                'total' => $produto->busca()->total(),
+                'ativo' => $produto->busca('status = 1')->total(),
+                'inativo' => $produto->busca('status = 0')->total()
+                ],
             'produtos' => $produto->busca()->ordem('status ASC, id DESC')->resultado(true),
             'produto' => [
                 'total' => $produto->total(),
@@ -32,6 +38,7 @@ class AdminDashboard extends AdminControlador
             ],
             'usuarios' => $usuario->busca()->resultado(true),
             'usuario' => [
+                'login' => $usuario->busca()->ordem('ultimo_login DESC')->limite(5)->resultado(true),
                 'total' => $usuario->total(),
                 'ativo' => $usuario->busca('status = 1')->total(),
                 'inativo' => $usuario->busca('status = 0')->total(),
@@ -41,7 +48,8 @@ class AdminDashboard extends AdminControlador
                 'total' => $categoria->total(),
                 'ativo' => $categoria->busca('status = 1')->total(),
                 'inativo' => $categoria->busca('status = 0')->total(),
-            ]
+            ],
+            'ultimas_categorias' => $categoria->busca()->ordem('titulo DESC')->limite(5)->resultado(true),
         ]);
     }
 

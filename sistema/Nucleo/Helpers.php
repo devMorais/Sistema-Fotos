@@ -4,9 +4,69 @@ namespace sistema\Nucleo;
 
 use sistema\Nucleo\Sessao;
 
+/**
+ * Classe helper - Classe auxiliar responsável por prover métodos estáticos para manipular e validar dados no sistema.
+ * @author Fernando <adm.sempreumbug.com>
+ * @copyright (c) 2023, SempreUmbug
+ */
 class Helpers
 {
 
+    /**
+     * Função para validar a senha.
+     *
+     * Esta função verifica se a senha fornecida atende aos requisitos de tamanho.
+     *
+     * @param string $senha A senha a ser validada.
+     *
+     * @return bool Retorna true se a senha atender aos requisitos, caso contrário, retorna false.
+     */
+    public static function validarSenha(string $senha): bool
+    {
+        if (mb_strlen($senha) >= 6 && mb_strlen($senha) <= 50) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Função para gerar um hash seguro de senha.
+     *
+     * Esta função recebe uma senha e retorna um hash seguro usando a função password_hash.
+     * Recomenda-se fornecer o algoritmo e opções adequados ao usar esta função na implementação real.
+     *
+     * @param string $senha A senha a ser hash.
+     *
+     * @return string Retorna o hash seguro da senha.
+     */
+    public static function gerarSenha(string $senha): string
+    {
+        $algo = PASSWORD_BCRYPT;
+        $options = ['cost' => 12];
+
+        return password_hash($senha, $algo, $options);
+    }
+
+    /**
+     * Função para verificar se uma senha corresponde a um hash seguro.
+     *
+     * Esta função verifica se a senha fornecida corresponde ao hash seguro fornecido.
+     *
+     * @param string $senha A senha a ser verificada.
+     * @param string $hash O hash seguro a ser comparado com a senha.
+     *
+     * @return bool Retorna true se a senha corresponder ao hash seguro, caso contrário, retorna false.
+     */
+    public static function verificarSenha(string $senha, string $hash): bool
+    {
+        return password_verify($senha, $hash);
+    }
+
+    /**
+     * Instancia e retorna as mensagens flash por sessão.
+     * @return string|null
+     */
     public static function flash(): ?string
     {
         $sessao = new Sessao();

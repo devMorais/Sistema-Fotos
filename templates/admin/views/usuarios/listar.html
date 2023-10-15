@@ -7,7 +7,7 @@
             <div class="text-end">
                 <a href="{{url('admin/usuarios/cadastrar')}}" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Cadastrar</a>
             </div>
-            <h5 class="card-title">Usuarios</h5>                               
+            <h5 class="card-title">Usuários</h5>                               
             <div class="pagetitle">
                 <nav>
                     <ol class="breadcrumb">
@@ -17,42 +17,54 @@
                 </nav>
             </div>
             {{ flash() }}
-            <div class="row justify-content-between">
-                <div class="col-auto">
-                    <span class="badge rounded-pill bg-primary">Total Geral: {{usuario.total}}</span>
-                </div>
-                <div class="col-auto">
-                    <span class="badge rounded-pill bg-success">Total Ativos: {{usuario.ativo}}</span>
-                </div>
-                <div class="col-auto">
-                    <span class="badge rounded-pill bg-danger">Total Inativos: {{usuario.inativo}}</span>
+            <div class="card-header bg-white border-5 d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge rounded text-bg-dark bg-opacity-25">
+                        <span class="text-dark bg-opacity-100">{{total.usuarios}} usuário</span>
+                        <span class="badge text-bg-success bg-opacity-100">{{total.usuariosAtivo}}</span>
+                        <span class="badge text-bg-danger bg-opacity-100">{{total.usuariosInativo}}</span>
+                    </span> 
+
+                    <span class="badge rounded text-bg-danger bg-opacity-25">
+                        <span class="text-dark bg-opacity-100">{{total.admin}} admin</span>
+                        <span class="badge text-bg-success bg-opacity-100">{{total.adminAtivo}}</span>
+                        <span class="badge text-bg-danger bg-opacity-100">{{total.adminInativo}}</span>
+                    </span>
                 </div>
             </div>
-            <hr>
-            <br>
             <div class="table-responsive">
                 <table class="table table-bordered border-primary table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Level</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">E-mail</th>
-                            <th scope="col">Senha</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Ações</th>
+                        <tr>
+                            <th>id</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th class="text-center">Level</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ação</th>
                         </tr>
+
                     </thead>
                     <tbody>
                         {% for usuario in usuarios %}
                         <tr>
-                            <th scope="row">{{usuario.id}}</th>
-                            <td>{{usuario.level}}</td>
-                            <td><small>{{usuario.nome}}</small></td>
-                            <td><small>{{usuario.email}}</small></td>
-                            <td><small>{{usuario.senha}}</small></td>
+                            <th>{{usuario.id}}</th>
+                            <td>
+                                <a href="{{ url('admin/usuarios/editar/'~usuario.id) }}" tooltip="tooltip" title="Editar">
+                                    {{usuario.nome}}
+                                </a>                            
+                            </td>
+                            <td>{{usuario.email}}</td>
                             <td class="text-center">
-                                {% if usuario.status == 1 %}
+                                {% if usuario.level == 3 %}
+                                <div class="text-danger fw-bold">Admin</div>
+                                {% else %}
+                                <div class="text-secondary">Usuário</div>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if produto.status == 1 %}
                                 <i class="bi bi-circle-fill text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Ativo"></i>
                                 {% else %}
                                 <i class="bi bi-circle-fill text-danger" tooltip="tooltip" title="Inativo"></i>
@@ -67,7 +79,7 @@
                                 </div>
                             </td>
                         </tr>
-                        {% endfor %}
+                        {%endfor%}
                     </tbody>
                 </table>
             </div>

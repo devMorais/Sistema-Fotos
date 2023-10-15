@@ -6,16 +6,13 @@ use sistema\Nucleo\Conexao;
 use sistema\Nucleo\Mensagem;
 
 /**
- * Classe Modelo
+ * Classe Active Record Modelo - Active Record é um padrão de projeto que trabalha com a técnica ORM (Object Relational Mapper). Este padrão consiste em mapear um objeto a uma tabela do Banco da dados, a fim de tornar o trabalho com os dados persistido em um banco de dados, totalmente orientado a objetos.
  *
- * Esta classe serve como um modelo de base para outras classes de modelo no sistema.
- * Ela fornece funcionalidades comuns, como busca, inserção, atualização e exclusão de registros no banco de dados.
- *
- * @package sistema\Nucleo
- * @author Fernando
+ * @author Fernando Aguiar
  */
 abstract class Modelo
 {
+
     protected $dados;
     protected $query;
     protected $erro;
@@ -27,9 +24,8 @@ abstract class Modelo
     protected $mensagem;
 
     /**
-     * Construtor da classe Modelo.
-     *
-     * @param string $tabela O nome da tabela no banco de dados associada a este modelo.
+     * Construtor da classe
+     * @param string $tabela
      */
     public function __construct(string $tabela)
     {
@@ -38,9 +34,8 @@ abstract class Modelo
     }
 
     /**
-     * Define a ordem dos resultados da consulta.
-     *
-     * @param string $ordem A cláusula de ordem (ex. "campo ASC" ou "campo DESC").
+     * Ordenação
+     * @param string $ordem
      * @return $this
      */
     public function ordem(string $ordem)
@@ -50,9 +45,8 @@ abstract class Modelo
     }
 
     /**
-     * Define o limite de resultados da consulta.
-     *
-     * @param string $limite O número máximo de resultados a serem retornados.
+     * Limite
+     * @param string $limite
      * @return $this
      */
     public function limite(string $limite)
@@ -62,9 +56,8 @@ abstract class Modelo
     }
 
     /**
-     * Define o deslocamento de resultados da consulta.
-     *
-     * @param string $offset O deslocamento de resultados a partir do início.
+     * Offset
+     * @param string $offset
      * @return $this
      */
     public function offset(string $offset)
@@ -74,55 +67,49 @@ abstract class Modelo
     }
 
     /**
-     * Retorna o erro da última operação.
-     *
-     * @return mixed O erro da última operação, se houver.
+     * Erros
+     * @return mixed
      */
-    public function erro()
+    public function erro(): mixed
     {
         return $this->erro;
     }
 
     /**
-     * Retorna a instância da classe de mensagens.
-     *
-     * @return Mensagem A instância da classe de mensagens.
+     * Mensagens
+     * @return Mensagem|null
      */
-    public function mensagem()
+    public function mensagem(): ?Mensagem
     {
         return $this->mensagem;
     }
 
     /**
-     * Retorna os dados do registro atual.
-     *
-     * @return mixed Os dados do registro atual.
+     * Dados
+     * @return object|null
      */
-    public function dados()
+    public function dados(): ?object
     {
         return $this->dados;
     }
 
     /**
-     * Define um valor para uma propriedade dinamicamente.
-     *
-     * @param string $nome O nome da propriedade.
-     * @param mixed $valor O valor a ser definido.
+     * __set() é executado ao escrever dados em atributos inacessíveis.
+     * @param type $nome
+     * @param type $valor
      */
     public function __set($nome, $valor)
     {
         if (empty($this->dados)) {
             $this->dados = new \stdClass();
         }
-
-        return $this->dados->$nome = $valor;
+        $this->dados->$nome = $valor;
     }
 
     /**
-     * Verifica se uma propriedade está definida.
-     *
-     * @param string $nome O nome da propriedade.
-     * @return bool true se a propriedade estiver definida, false caso contrário.
+     * __isset() é disparado ao chamar a função isset() ou empty() em atributos inacessíveis.
+     * @param type $nome
+     * @return type
      */
     public function __isset($nome)
     {
@@ -130,10 +117,9 @@ abstract class Modelo
     }
 
     /**
-     * Retorna o valor de uma propriedade dinamicamente.
-     *
-     * @param string $nome O nome da propriedade.
-     * @return mixed O valor da propriedade, ou null se não estiver definida.
+     * __get é ativado sempre que tentar acessar uma atributos que não existe ou está inacessivel
+     * @param type $nome
+     * @return type
      */
     public function __get($nome)
     {
@@ -141,14 +127,13 @@ abstract class Modelo
     }
 
     /**
-     * Inicia uma consulta ao banco de dados com cláusulas WHERE e parâmetros.
-     *
-     * @param string|null $termos A cláusula WHERE da consulta.
-     * @param string|null $parametros Os parâmetros da consulta.
-     * @param string $colunas As colunas a serem selecionadas (padrão: '*').
+     * Busca dados de acordo com os termos e parametros informados
+     * @param string|null $termos
+     * @param string|null $parametros
+     * @param string $colunas
      * @return $this
      */
-    public function busca(?string $termos = null, ?string $parametros = null, string $colunas = '*')
+    public function busca(?string $termos = null, string $parametros = '', string $colunas = '*'): object
     {
         if ($termos) {
             $this->query = "SELECT {$colunas} FROM " . $this->tabela . " WHERE {$termos} ";
@@ -161,12 +146,11 @@ abstract class Modelo
     }
 
     /**
-     * Retorna o resultado da consulta ao banco de dados.
-     *
-     * @param bool $todos true para obter todos os resultados, false para obter apenas o primeiro.
-     * @return mixed Os resultados da consulta ou null em caso de erro.
+     * Retorna um ou todos os registros
+     * @param bool $todos - opcional, true retorna todos os registros
+     * @return mixed
      */
-    public function resultado(bool $todos = false)
+    public function resultado(bool $todos = false): mixed
     {
         try {
             $stmt = Conexao::getInstancia()->prepare($this->query . $this->ordem . $this->limite . $this->offset);
@@ -177,9 +161,10 @@ abstract class Modelo
             }
 
             if ($todos) {
-                return $stmt->fetchAll();
+                //PDO::FETCH_CLASS: Retorna instâncias da classe especificada, mapeando as colunas de cada linha para propriedades nomeadas na classe.
+                return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
             }
-
+            //fetchObject - Busca a próxima linha e a retorna como um objeto
             return $stmt->fetchObject(static::class);
         } catch (\PDOException $ex) {
             $this->erro = $ex;
@@ -188,107 +173,111 @@ abstract class Modelo
     }
 
     /**
-     * Método protegido para inserir um novo registro no banco de dados.
-     *
-     * @param array $dados Os dados a serem inseridos.
-     * @return mixed O ID do novo registro inserido ou null em caso de erro.
+     * Cadastra os dados
+     * @param array $dados
+     * @return int|null
      */
-    protected function cadastrar(array $dados)
+    protected function cadastrar(array $dados): ?int
     {
         try {
             $colunas = implode(',', array_keys($dados));
             $valores = ':' . implode(',:', array_keys($dados));
 
-            $query = "INSERT into " . $this->tabela . " ($colunas) VALUES ({$valores})";
+            $query = "INSERT INTO " . $this->tabela . " ({$colunas}) VALUES ({$valores}) ";
             $stmt = Conexao::getInstancia()->prepare($query);
             $stmt->execute($this->filtro($dados));
 
             return Conexao::getInstancia()->lastInsertId();
         } catch (\PDOException $ex) {
-            $this->erro = $ex;
+            $this->erro = $ex->getMessage();
             return null;
         }
     }
 
     /**
-     * Método protegido para atualizar um registro no banco de dados.
-     *
-     * @param array $dados Os dados a serem atualizados.
-     * @param string $termos A cláusula WHERE para identificar o registro a ser atualizado.
-     * @return mixed O número de registros atualizados ou null em caso de erro.
+     * Atualiza dados de acordo com os termos e parametros informados
+     * @param array $dados
+     * @param string $termos
+     * @return int
      */
-    protected function atualizar(array $dados, string $termos)
+    protected function atualizar(array $dados, string $termos): int
     {
         try {
             $set = [];
+
             foreach ($dados as $chave => $valor) {
                 $set[] = "{$chave} = :{$chave}";
             }
-            $set = implode(',', $set);
+            $set = implode(', ', $set);
 
             $query = "UPDATE " . $this->tabela . " SET {$set} WHERE {$termos}";
-
             $stmt = Conexao::getInstancia()->prepare($query);
             $stmt->execute($this->filtro($dados));
 
             return ($stmt->rowCount() ?? 1);
         } catch (\PDOException $ex) {
-            $this->erro = $ex;
+            $this->erro = $ex->getMessage();
             return null;
         }
     }
 
     /**
-     * Método privado para aplicar um filtro aos dados.
-     *
-     * @param array $dados Os dados a serem filtrados.
-     * @return array Os dados filtrados.
+     * Filtra os dados
+     * @param array $dados
+     * @return array|null
      */
-    private function filtro(array $dados)
+    private function filtro(array $dados): ?array
     {
         $filtro = [];
 
         foreach ($dados as $chave => $valor) {
             $filtro[$chave] = (is_null($valor) ? null : filter_var($valor, FILTER_DEFAULT));
         }
-
         return $filtro;
     }
 
     /**
-     * Método protegido para converter os dados do modelo em um array.
-     *
-     * @return array Os dados do modelo em forma de array.
+     * Armazena os dados
+     * @return array|null
      */
-    protected function armazenar()
+    protected function armazenar(): ?array
     {
         $dados = (array) $this->dados;
+
         return $dados;
     }
 
     /**
-     * Busca um registro no banco de dados com base em seu ID.
-     *
-     * @param int $id O ID do registro a ser buscado.
-     * @return mixed O registro encontrado ou null em caso de erro.
+     * Busca por ID
+     * @param int $id
+     * @return Modelo|null
      */
-    public function buscaPorId(int $id)
+    public function buscaPorId(int $id): ?Modelo
     {
         $busca = $this->busca("id = {$id}");
         return $busca->resultado();
     }
 
     /**
-     * Apaga registros do banco de dados com base em termos de consulta.
-     *
-     * @param string $termos A cláusula WHERE para identificar os registros a serem apagados.
-     * @return bool true se a operação for bem-sucedida, false em caso de erro.
+     * Busca por Slug
+     * @param string $slug
+     * @return Modelo|null
      */
-    public function apagar(string $termos)
+    public function buscaPorSlug(string $slug): ?Modelo
+    {
+        $busca = $this->busca("slug = :s", "s={$slug}");
+        return $busca->resultado();
+    }
+
+    /**
+     * Apaga registros de acordo com os termos informados
+     * @param string $termos
+     * @return bool
+     */
+    public function apagar(string $termos): bool
     {
         try {
             $query = "DELETE FROM " . $this->tabela . " WHERE {$termos}";
-
             $stmt = Conexao::getInstancia()->prepare($query);
             $stmt->execute();
 
@@ -300,13 +289,13 @@ abstract class Modelo
     }
 
     /**
-     * Deleta o registro atual do modelo do banco de dados.
-     *
-     * @return bool true se a operação for bem-sucedida, false em caso de erro.
+     * Deleta um registro pelo ID
+     * @return boolean
      */
-    public function deletar()
+    public function deletar(): bool
     {
         if (empty($this->id)) {
+            $this->erro = 'Erro de sistema ao tentar deletar!';
             return false;
         }
 
@@ -315,49 +304,89 @@ abstract class Modelo
     }
 
     /**
-     * Retorna o número total de registros na tabela.
-     *
-     * @return int O número total de registros.
+     * Retorna o total de registros
+     * @return int
      */
     public function total(): int
     {
         $stmt = Conexao::getInstancia()->prepare($this->query);
-        $stmt->execute();
-
+        $stmt->execute($this->parametros);
         return $stmt->rowCount();
     }
 
     /**
-     * Salva os dados do modelo no banco de dados.
-     *
-     * Este método decide se deve cadastrar um novo registro ou atualizar um existente com base no ID do modelo.
-     * Em seguida, atualiza os dados do modelo com os dados recém-salvos do banco de dados.
-     *
-     * @return bool true se a operação for bem-sucedida, false em caso de erro.
+     * Salva e atualiza os dados
+     * @return bool
      */
-    public function salvar()
+    public function salvar(): bool
     {
-        // CADASTRAR
+        //CADASTRAR
         if (empty($this->id)) {
             $id = $this->cadastrar($this->armazenar());
             if ($this->erro) {
-                $this->mensagem->erro('Erro de sistema ao tentar cadastrar os dados')->flash();
+                $this->mensagem->erro('Erro de sistema ao tentar cadastrar os dados');
                 return false;
             }
         }
 
-        // ATUALIZAR
+        //ATUALIZAR
         if (!empty($this->id)) {
             $id = $this->id;
             $this->atualizar($this->armazenar(), "id = {$id}");
             if ($this->erro) {
-                $this->mensagem->erro('Erro de sistema ao tentar atualizar os dados')->flash();
+                $this->mensagem->erro('Erro de sistema ao tentar atualizar os dados');
                 return false;
             }
         }
 
         $this->dados = $this->buscaPorId($id)->dados();
-
         return true;
     }
+
+    /**
+     * Retorna o ultimo ID da tabela
+     * @return int
+     */
+    private function ultimoId(): int
+    {
+        return Conexao::getInstancia()->query("SELECT MAX(id) as maximo FROM {$this->tabela}")->fetch()->maximo + 1;
+    }
+
+    /**
+     * Checa e monta Slug - URL amigável
+     * @return void
+     */
+    protected function slug(): void
+    {
+        $baseSlug = $this->slug; // Pega o slug base do título
+
+        $suffix = 1; // Inicializa o sufixo numérico
+        // Enquanto houver slugs iguais no banco de dados, aumenta o sufixo
+        while ($this->checaSlugExistente($this->slug)) {
+            $this->slug = "{$baseSlug}-{$suffix}";
+            $suffix++;
+        }
+    }
+
+    /**
+     * Verifica se o slug já existe no banco de dados
+     * @param string $slug
+     * @return bool
+     */
+    private function checaSlugExistente($slug): bool
+    {
+        return $this->busca("slug = :s AND id != :id", "s={$slug}&id={$this->id}")->total() > 0;
+    }
+
+    /**
+     * Salvar visitas
+     * @return void
+     */
+    public function salvarVisitas(): void
+    {
+        $this->visitas += 1;
+        $this->ultima_visita_em = date('Y-m-d H:i:s');
+        $this->salvar();
+    }
+
 }

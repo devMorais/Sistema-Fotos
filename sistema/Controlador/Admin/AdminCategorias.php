@@ -41,18 +41,20 @@ class AdminCategorias extends AdminControlador
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if (isset($dados)) {
+            if ($this->validarDados($dados)) {
+                $categoria = new CategoriaModelo();
 
-            $categoria = new CategoriaModelo();
+                $categoria->titulo = $dados['titulo'];
 
-            $categoria->titulo = $dados['titulo'];
-            $categoria->categoria_id = $dados['categoria_id'];
-            $categoria->texto = $dados['texto'];
-            $categoria->status = $dados['status'];
+                $categoria->texto = $dados['texto'];
+                $categoria->status = $dados['status'];
+                $categoria->cadastrado_em = date('Y-m-d H:i:s');
 
-            if ($categoria->salvar()) {
-                $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+                if ($categoria->salvar()) {
+                    $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
 
-                Helpers::redirecionar('admin/categorias/listar');
+                    Helpers::redirecionar('admin/categorias/listar');
+                }
             }
         }
 
@@ -76,9 +78,10 @@ class AdminCategorias extends AdminControlador
             $categoria = (new CategoriaModelo())->buscaPorId($id);
 
             $categoria->titulo = $dados['titulo'];
-            $categoria->categoria_id = $dados['categoria_id'];
+
             $categoria->texto = $dados['texto'];
             $categoria->status = $dados['status'];
+            $categoria->atualizado_em = date('Y-m-d H:i:s');
 
             if ($categoria->salvar()) {
                 $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
@@ -104,6 +107,10 @@ class AdminCategorias extends AdminControlador
             if (!$categoria) {
                 $this->mensagem->erro('A categoria que você está tentando deletar não existe.')->flash();
                 Helpers::redirecionar('admin/categorias/listar');
+            } elseif ($categoria->produtos($categoria->id)) {
+
+                $this->mensagem->erro("Antes de excluir a categoria {$categoria->titulo}, por favor, revise e atualize os produtos associados a ela, pois a categoria ainda contém produtos registrados.")->flash();
+                Helpers::redirecionar('admin/categorias/listar');
             } else {
                 if ($categoria->apagar("id = {$id}")) {
                     $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
@@ -114,5 +121,25 @@ class AdminCategorias extends AdminControlador
                 }
             }
         }
+    }
+
+    /**
+     * Checa os dados do formulário
+     * @param array $dados
+     * @return bool
+     */
+    public function validarDados(array $dados): bool
+    {
+        if (empty($dados['titulo'])) {
+            $this->mensagem->alerta('Informe um titulo para categoria')->flash();
+            return false;
+        }
+        if (empty($dados['texto'])) {
+            $this->mensagem->alerta('Informe a descrição da categoria')->flash();
+            return false;
+        }
+
+
+        return true;
     }
 }

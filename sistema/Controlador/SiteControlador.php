@@ -24,7 +24,7 @@ class SiteControlador extends Controlador
      */
     public function categorias(): array
     {
-        return (new CategoriaModelo())->busca()->resultado(true);
+        return (new CategoriaModelo())->busca("status = 1 ")->resultado(true);
     }
 
     /**
@@ -69,6 +69,10 @@ class SiteControlador extends Controlador
             Helpers::redirecionar('404');
         }
 
+        $produto->visitas += 1;
+        $produto->ultima_visita_em = date('Y-m-d H:i:s');
+        $produto->salvar();
+
         echo $this->template->renderizar('produto.html', [
             'produto' => $produto,
             'categorias' => $this->categorias()
@@ -82,7 +86,7 @@ class SiteControlador extends Controlador
      */
     public function categoriaPorId(int $id): void
     {
-        $produtos = (new CategoriaModelo())->buscaPorId($id);
+        $produtos = (new CategoriaModelo())->produtos($id);
 
         echo $this->template->renderizar('categoria.html', [
             'produtos' => $produtos,

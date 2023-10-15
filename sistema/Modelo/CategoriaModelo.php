@@ -17,4 +17,10 @@ class CategoriaModelo extends Modelo
     {
         parent::__construct('categorias');
     }
+
+    public function produtos(int $id): ?array
+    {
+        $busca = (new ProdutoModelo())->busca("categoria_id = {$id}");
+        return $busca->resultado(true);
+    }
 }

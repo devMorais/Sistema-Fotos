@@ -12,7 +12,8 @@
                     </ol>
                 </nav>
             </div>
-        <form action="{% if categoria.id %}{{url('admin/categorias/editar/'~categoria.id)}}{%else%}{{url('admin/categorias/cadastrar')}}{%endif%}" method="post" class="row g-3">
+            {{ flash() }}
+            <form action="{% if categoria.id %}{{url('admin/categorias/editar/'~categoria.id)}}{%else%}{{url('admin/categorias/cadastrar')}}{%endif%}" method="post" class="row g-3">
                 <div class="col-md-6">
                     <div class="form-floating">
                         <input type="text" name="titulo" value="{{categoria.titulo}}" id="titulo" class="form-control">

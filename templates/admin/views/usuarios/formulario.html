@@ -12,49 +12,49 @@
                     </ol>
                 </nav>
             </div>
-            <form action="{% if usuario.id %}{{url('admin/usuarios/editar/'~usuario.id)}}{%else%}{{url('admin/usuarios/cadastrar')}}{%endif%}" method="post" class="row g-3">
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="number" name="level" value="{{usuario.level}}" id="level" class="form-control">
-                        <label for="titulo">Título</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-floating">
-                        <textarea name="nome" id="nome" class="form-control" style="height: 100px;">{{usuario.nome}}</textarea>
-                        <label for="texto">Nome</label>
-                    </div>
-                </div>
-                 <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="number" name="email" value="{{usuario.email}}" id="email" class="form-control">
-                        <label for="titulo">email</label>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="password" name="senha" value="{{usuario.senha}}" id="senha" class="form-control">
-                        <label for="titulo">senha</label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-3">
-                        <select name="status" class="form-select" id="status">
+            {{ flash() }}
+            <form action="{% if usuario.id %}{{url('admin/usuarios/editar/'~usuario.id)}}{%else%}{{url('admin/usuarios/cadastrar')}}{%endif%}" method="post">
 
-                            <option value="1" {% if usuario.status == '1' %}selected{% endif %}>Ativo</option>
-                            <option value="0" {% if usuario.status == '0' %}selected{% endif %}>Inativo</option>
-                        </select>
-                        <label for="status">Status</label>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" name="nome" id="nome" value="{{usuario.nome}}" class="form-control" placeholder="Nome">
+                            <label for="nome">Nome</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                            <input type="email" name="email" id="email" value="{{usuario.email}}" class="form-control" placeholder="E-mail">
+                            <label for="email">E-mail</label>
+                        </div> 
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                            <input type="password" name="senha" id="senha" class="form-control" placeholder="Senha">
+                            <label for="senha">Senha</label>
+                        </div>  
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-floating">
+                            <select class="form-select" name="level" id="level">
+                                <option value="1" {% if usuario.level == '1' %}selected{%endif%}>Usuário</option>
+                                <option value="3" {% if usuario.level == '3' %}selected{%endif%}>Admin</option>
+                            </select>
+                            <label for="level">Level</label>
+                        </div> 
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-floating">
+                            <select class="form-select" name="status" id="status">
+                                <option value="1" {% if usuario.status == '1' %}selected{%endif%}>Ativo</option>
+                                <option value="0" {% if usuario.status == '0' %}selected{%endif%}>Inativo</option>
+                            </select>
+                            <label for="status">Status</label>
+                        </div> 
                     </div>
                 </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-outline-primary">
-                        {% if usuario.id %}
-                        <i class="bi bi-pencil"></i> Atualizar
-                        {% else %}
-                        <i class="bi bi-plus"></i> Cadastrar
-                        {% endif %}
-                    </button>
+                <div class="d-grid gap-2">
+                    <input type="submit" class="btn btn-dark" value="{% if usuario.id %}Atualizar{%else%}Cadastrar{%endif%}">
                 </div>
             </form>
 

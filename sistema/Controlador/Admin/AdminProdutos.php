@@ -47,17 +47,21 @@ class AdminProdutos extends AdminControlador
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if (isset($dados)) {
-            $produto = new ProdutoModelo();
+            if ($this->validarDados($dados)) {
+                $produto = new ProdutoModelo();
 
-            $produto->titulo = $dados['titulo'];
-            $produto->categoria_id = $dados['categoria_id'];
-            $produto->texto = $dados['texto'];
-            $produto->status = $dados['status'];
+                $produto->usuario_id = $this->usuario->id;
+                $produto->categoria_id = $dados['categoria_id'];
+                $produto->slug = Helpers::slug($dados['titulo']);
+                $produto->titulo = $dados['titulo'];
+                $produto->texto = $dados['texto'];
+                $produto->status = $dados['status'];
 
-            if ($produto->salvar()) {
-                $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+                if ($produto->salvar()) {
+                    $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
 
-                Helpers::redirecionar('admin/produtos/listar');
+                    Helpers::redirecionar('admin/produtos/listar');
+                }
             }
         }
 
@@ -80,17 +84,20 @@ class AdminProdutos extends AdminControlador
 
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
-            $produto = (new ProdutoModelo())->buscaPorId($id);
 
-            $produto->titulo = $dados['titulo'];
-            $produto->categoria_id = $dados['categoria_id'];
-            $produto->texto = $dados['texto'];
-            $produto->status = $dados['status'];
+            if ($this->validarDados($dados)) {
+                $produto = (new ProdutoModelo())->buscaPorId($id);
 
-            if ($produto->salvar()) {
-                $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
+                $produto->titulo = $dados['titulo'];
+                $produto->categoria_id = $dados['categoria_id'];
+                $produto->texto = $dados['texto'];
+                $produto->status = $dados['status'];
 
-                Helpers::redirecionar('admin/produtos/listar');
+                if ($produto->salvar()) {
+                    $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
+
+                    Helpers::redirecionar('admin/produtos/listar');
+                }
             }
         }
 
@@ -124,5 +131,25 @@ class AdminProdutos extends AdminControlador
                 }
             }
         }
+    }
+
+    /**
+     * Checa os dados do formulário
+     * @param array $dados
+     * @return bool
+     */
+    public function validarDados(array $dados): bool
+    {
+        if (empty($dados['titulo'])) {
+            $this->mensagem->alerta('Informe um titulo ao produto')->flash();
+            return false;
+        }
+        if (empty($dados['texto'])) {
+            $this->mensagem->alerta('Informe a descrição do produto')->flash();
+            return false;
+        }
+
+
+        return true;
     }
 }

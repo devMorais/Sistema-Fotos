@@ -12,6 +12,7 @@
                     </ol>
                 </nav>
             </div>
+            {{ flash() }}
             <form action="{% if produto.id %}{{url('admin/produtos/editar/'~produto.id)}}{%else%}{{url('admin/produtos/cadastrar')}}{%endif%}" method="post" class="row g-3">
                 <div class="col-md-12">
                     <div class="form-floating">
