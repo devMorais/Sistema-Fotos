@@ -35,4 +35,10 @@ class ProdutoModelo extends Modelo
 
         return null;
     }
+
+    public function salvar(): bool
+    {
+        $this->slug();
+        return parent::salvar();
+    }
 }

@@ -61,12 +61,16 @@ class AdminProdutos extends AdminControlador
                     $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
 
                     Helpers::redirecionar('admin/produtos/listar');
+                } else {
+                    $this->mensagem->erro($produto->erro())->flash();
+                    Helpers::redirecionar('admin/produtos/listar');
                 }
             }
         }
 
         echo $this->template->renderizar('produtos/formulario.html', [
-            'categorias' => (new CategoriaModelo())->busca()->resultado(true)
+            'categorias' => (new CategoriaModelo())->busca()->resultado(true),
+            'produto' => $dados
         ]);
     }
 
@@ -88,14 +92,20 @@ class AdminProdutos extends AdminControlador
             if ($this->validarDados($dados)) {
                 $produto = (new ProdutoModelo())->buscaPorId($id);
 
-                $produto->titulo = $dados['titulo'];
+                $produto->usuario_id = $this->usuario->id;
                 $produto->categoria_id = $dados['categoria_id'];
+                $produto->slug = Helpers::slug($dados['titulo']);
+                $produto->titulo = $dados['titulo'];
                 $produto->texto = $dados['texto'];
                 $produto->status = $dados['status'];
+                $produto->atualizado_em = date('Y-m-d H:i:s');
 
                 if ($produto->salvar()) {
                     $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
 
+                    Helpers::redirecionar('admin/produtos/listar');
+                } else {
+                    $this->mensagem->erro($produto->erro())->flash();
                     Helpers::redirecionar('admin/produtos/listar');
                 }
             }

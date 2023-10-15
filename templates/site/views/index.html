@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 <!-- ======= Hero Section ======= -->
-<!--<section id="hero" class="hero d-flex flex-column justify-content-center align-items-center" data-aos="fade" data-aos-delay="1500">
+<section id="hero" class="hero d-flex flex-column justify-content-center align-items-center" data-aos="fade" data-aos-delay="1500">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-</section>-->
+</section>
 <main id="main" data-aos="fade" data-aos-delay="1500">
     <!-- ======= Gallery Section ======= -->
     <section id="gallery" class="gallery">
@@ -23,7 +23,7 @@
                         <img src="{{url('templates/site/assets/img/gallery/gallery-1.jpg')}}" class="img-fluid" alt="">
                         <div class="gallery-links d-flex align-items-center justify-content-center">
                             <a href="{{url('templates/site/assets/img/gallery/gallery-1.jpg')}}" title="{{produto.titulo}}" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                            <a href="{{url('produto/'~produto.id)}}" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                            <a href="{{url('produto/'~produto.slug)}}" class="details-link"><i class="bi bi-link-45deg"></i></a>
                             <p></p>
                         </div>
                     </div>

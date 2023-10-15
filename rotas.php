@@ -8,8 +8,8 @@ try {
 
     SimpleRouter::get(URL_SITE, 'SiteControlador@index');
     SimpleRouter::get(URL_SITE . 'sobre-nos', 'SiteControlador@sobre');
-    SimpleRouter::get(URL_SITE . 'produto/{id}', 'SiteControlador@produtoPorId');
-    SimpleRouter::get(URL_SITE . 'categoria/{id}', 'SiteControlador@categoriaPorId');
+    SimpleRouter::get(URL_SITE . 'produto/{slug}', 'SiteControlador@produtoPorId');
+    SimpleRouter::get(URL_SITE . 'categoria/{slug}', 'SiteControlador@categoriaPorId');
     SimpleRouter::post(URL_SITE . 'buscar', 'SiteControlador@buscar');
     SimpleRouter::get(URL_SITE . 'contato', 'SiteControlador@contato');
 

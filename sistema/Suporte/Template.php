@@ -73,6 +73,19 @@ class Template
                                 return Helpers::contarTempo($data);
                             })
             ),
+            $this->twig->addFunction(
+                    new \Twig\TwigFunction('formatarNumero', function (int $numero) {
+                                return Helpers::formatarNumero($numero);
+                            })
+            ),
+            $this->twig->addFunction(
+                    new \Twig\TwigFunction('tempoCarregamento', function () {
+
+                                $tempoTotal = microtime(true) - filter_var($_SERVER["REQUEST_TIME_FLOAT"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+
+                                return number_format($tempoTotal, 2);
+                            })
+            ),
         );
     }
 }

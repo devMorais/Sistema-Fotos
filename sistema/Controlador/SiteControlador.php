@@ -33,10 +33,10 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
-        $produtos = (new ProdutoModelo())->busca("status = 1")->resultado(true);
+        $produtos = (new ProdutoModelo())->busca("status = 1");
 
         echo $this->template->renderizar('index.html', [
-            'produtos' => $produtos,
+            'produtos' => $produtos->resultado(true),
             'categorias' => $this->categorias()
         ]);
     }
@@ -50,28 +50,29 @@ class SiteControlador extends Controlador
         $busca = filter_input(INPUT_POST, 'busca', FILTER_DEFAULT);
         if (isset($busca)) {
             $produtos = (new ProdutoModelo())->busca("status = 1 AND titulo LIKE '%{$busca}%'")->resultado(true);
-            foreach ($produtos as $produto) {
-                echo "<li class='list-group-item'><a href=" . Helpers::url('produto/') . $produto->id . ">$produto->titulo</a></li>";
+            if ($produtos) {
+                foreach ($produtos as $produto) {
+                    echo "<li class='list-group-item'><a href=" . Helpers::url('produto/') . $produto->slug . ">$produto->titulo</a></li>";
+                }
             }
         }
     }
 
     /**
-     * Método responsável por fazer uma busca do produto através do ID.
-     * @param int $id
+     * Método responsável por fazer uma busca do produto através de slug.
+     * @param string $slug
      * @return void
      */
-    public function produtoPorId(int $id): void
+    public function produtoPorId(string $slug): void
     {
-        $produto = (new ProdutoModelo())->buscaPorId($id);
+        $produto = (new ProdutoModelo())->buscaPorSlug($slug);
 
         if (!$produto) {
             Helpers::redirecionar('404');
         }
 
-        $produto->visitas += 1;
-        $produto->ultima_visita_em = date('Y-m-d H:i:s');
-        $produto->salvar();
+
+        $produto->salvarVisitas();
 
         echo $this->template->renderizar('produto.html', [
             'produto' => $produto,
@@ -84,12 +85,19 @@ class SiteControlador extends Controlador
      * @param int $id
      * @return void
      */
-    public function categoriaPorId(int $id): void
+    public function categoriaPorId(string $slug): void
     {
-        $produtos = (new CategoriaModelo())->produtos($id);
+        $categoria = (new CategoriaModelo())->buscaPorSlug($slug);
+
+        if (!$categoria) {
+            Helpers::redirecionar('404');
+        }
+
+
+        $categoria->salvarVisitas();
 
         echo $this->template->renderizar('categoria.html', [
-            'produtos' => $produtos,
+            'produtos' => (new CategoriaModelo())->produtos($categoria->id),
             'categorias' => $this->categorias()
         ]);
     }

@@ -44,22 +44,24 @@ class AdminCategorias extends AdminControlador
             if ($this->validarDados($dados)) {
                 $categoria = new CategoriaModelo();
 
+                $categoria->usuario_id = $this->usuario->id;
+                $categoria->slug = Helpers::slug($dados['titulo']);
                 $categoria->titulo = $dados['titulo'];
-
                 $categoria->texto = $dados['texto'];
                 $categoria->status = $dados['status'];
-                $categoria->cadastrado_em = date('Y-m-d H:i:s');
 
                 if ($categoria->salvar()) {
-                    $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
-
+                    $this->mensagem->sucesso('Categoria cadastrada com sucesso')->flash();
+                    Helpers::redirecionar('admin/categorias/listar');
+                } else {
+                    $this->mensagem->erro($categoria->erro())->flash();
                     Helpers::redirecionar('admin/categorias/listar');
                 }
             }
         }
 
         echo $this->template->renderizar('categorias/formulario.html', [
-            'categorias' => (new CategoriaModelo())->busca()
+            'categorias' => $dados
         ]);
     }
 
@@ -74,19 +76,23 @@ class AdminCategorias extends AdminControlador
 
         $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (isset($dados)) {
+            if ($this->validarDados($dados)) {
+                $categoria = (new CategoriaModelo())->buscaPorId($categoria->id);
 
-            $categoria = (new CategoriaModelo())->buscaPorId($id);
+                $categoria->usuario_id = $this->usuario->id;
+                $categoria->slug = Helpers::slug($dados['titulo']);
+                $categoria->titulo = $dados['titulo'];
+                $categoria->texto = $dados['texto'];
+                $categoria->status = $dados['status'];
+                $categoria->atualizado_em = date('Y-m-d H:i:s');
 
-            $categoria->titulo = $dados['titulo'];
-
-            $categoria->texto = $dados['texto'];
-            $categoria->status = $dados['status'];
-            $categoria->atualizado_em = date('Y-m-d H:i:s');
-
-            if ($categoria->salvar()) {
-                $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
-
-                Helpers::redirecionar('admin/categorias/listar');
+                if ($categoria->salvar()) {
+                    $this->mensagem->sucesso('Categoria atualizada com sucesso')->flash();
+                    Helpers::redirecionar('admin/categorias/listar');
+                } else {
+                    $this->mensagem->erro($categoria->erro())->flash();
+                    Helpers::redirecionar('admin/categorias/listar');
+                }
             }
         }
 
