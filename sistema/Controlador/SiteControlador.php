@@ -93,7 +93,6 @@ class SiteControlador extends Controlador
             Helpers::redirecionar('404');
         }
 
-
         $categoria->salvarVisitas();
 
         echo $this->template->renderizar('categoria.html', [

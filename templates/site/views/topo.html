@@ -5,8 +5,9 @@
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
             <i class="bi bi-camera"></i>
-            <h1>[nome da loja]</h1>
+            <h1>ModaPraia</h1>
         </a>
+
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="{{url()}}" class="active">Home</a></li>
@@ -21,10 +22,42 @@
 
                 <li><a href="{{url('contato')}}">Contato</a></li>
             </ul>
+
+
+
+
         </nav>
-        <form data-url-busca="{{ url('buscar') }}" class="d-flex" role="search">
-            <input type="search" name="busca" id="busca" class="form-control form-control-dark text-bg-dark" placeholder="Buscar..." aria-label="Search">
-        </form>
+
+        <div class="text-end">
+            {% if usuario().level == 3 %}
+            <div class="btn-group">
+
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                    <i class="fa-solid fa-user me-2"></i> {{usuario().nome}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-lg-end">
+                    <li>
+                        <a class="dropdown-item" href="{{url('admin/dashboard/')}}" tooltip="tooltip" title="Dashboard">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{url('admin/usuarios/editar/'~usuario().id)}}" tooltip="tooltip" title="Perfil">
+                            Perfil
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="{{url('admin/sair')}}" tooltip="tooltip" title="Sair do Sistema">
+                            Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            {% endif %}
+
+        </div>
+
         <div class="header-social-links">
             <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
             <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>

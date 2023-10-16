@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'ceo/umbug',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '358ee3f26df2bce66c886dcbd6164c69d4f8905c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,12 +11,23 @@
     ),
     'versions' => array(
         'ceo/umbug' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '358ee3f26df2bce66c886dcbd6164c69d4f8905c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'digitalnature/php-ref' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '2381f04d7ebcbce1072e86b98a0ccbad191f3290',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../digitalnature/php-ref',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'pecee/simple-router' => array(
@@ -51,10 +62,21 @@
         'twig/twig' => array(
             'pretty_version' => '3.x-dev',
             'version' => '3.9999999.9999999.9999999-dev',
-            'reference' => '3ae6fb8723776f4fc9d8ab490fcabcd3173da8e3',
+            'reference' => '90647839acdb3143bf33015a4752874820670b41',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twig/twig',
             'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'verot/class.upload.php' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'd8522fdaba5c86d74301f908da66b7814efa4960',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../verot/class.upload.php',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
     ),
