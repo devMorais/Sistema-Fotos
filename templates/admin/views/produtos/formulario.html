@@ -1,19 +1,27 @@
 {% extends "dashboard.html" %}
-{% block conteudo %}  
+{% block conteudo %}
+
 <main id="main" class="main">
-    <div class="card">
+    <div class="card bg-light p-3 shadow-lg rounded border-3">
         <div class="card-body">
-            <h5 class="card-title">Peças</h5>                               
+            <h5 class="card-title">Produtos</h5>                               
             <div class="pagetitle">
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Cadastrar peça</li>
+                        <li class="breadcrumb-item active">Cadastrar produto</li>
                     </ol>
                 </nav>
             </div>
             {{ flash() }}
-            <form action="{% if produto.id %}{{url('admin/produtos/editar/'~produto.id)}}{%else%}{{url('admin/produtos/cadastrar')}}{%endif%}" method="post" class="row g-3">
+            <form action="{% if produto.id %}{{url('admin/produtos/editar/'~produto.id)}}{%else%}{{url('admin/produtos/cadastrar')}}{%endif%}" method="post" enctype="multipart/form-data" class="row g-3 my-4 custom-form">
+
+                <div class="mb-3">
+                    <label for="capa" class="form-label">Capa</label>
+                    <input class="form-control" type="file" value="{{produto.capa}}"  id="capa" name="capa" accept=".png, .jpg, .jpeg">
+                </div>
+
+
                 <div class="col-md-12">
                     <div class="form-floating">
                         <input type="text" name="titulo" value="{{produto.titulo}}" id="titulo" class="form-control">
@@ -22,7 +30,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-floating">
-                        <textarea name="texto" id="texto" class="form-control" style="height: 100px;">{{produto.texto}}</textarea>
+                        <textarea name="texto" class="form-control" id="summernote" style="height: 300px;">{{produto.texto}}</textarea>
                         <label for="texto">Texto</label>
                     </div>
                 </div>
@@ -44,7 +52,7 @@
                             {% endfor %}
 
                         </select>
-                        <label for="status">Categorias</label>
+                        <label for="status">Coleções</label>
                     </div>
                 </div>
 

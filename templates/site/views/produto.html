@@ -1,20 +1,37 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <h1>{{produto.titulo}}</h1>
-
-            <div class="my-3">
-                <small class="text-success">Por {{produto.usuario.nome}}, {{ produto.cadastrado_em|date("d/m/Y") }} às {{ produto.cadastrado_em|date("H:i") }} em {{produto.categoria.titulo}}</small>
-            </div>
-
-            <div class="texto">
-                <p>{{produto.texto}}</p>
+<!-- ======= End Page Header ======= -->
+<div class="page-header d-flex align-items-center">
+    <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h2>{{produto.titulo}}</h2>
+                <p>{{produto.texto | raw}}</p>
             </div>
         </div>
     </div>
 </div>
-
+<div class="container my-3">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">        
+            <img src="{{url('uploads/imagens/'~produto.capa)}}" class="img-fluid" alt="">
+            <hr>
+        </div>
+        <section id="gallery-single" class="gallery-single">
+            <div class="col-lg-12">
+                <div class="portfolio-info align-center">
+                    <h3>Informações do Projeto</h3>
+                    <ul>
+                        <li><strong>Coleção</strong> <span>{{produto.categoria.titulo}}</span></li>
+                        <li><strong>Cadastrado por</strong> <span>{{produto.usuario.nome}}</span></li>
+                        <li><strong>Project date</strong> <span>{{ produto.cadastrado_em|date("d/m/Y") }} às {{ produto.cadastrado_em|date("H:i") }}</span></li>
+                        <li><strong>Project URL</strong> <a href="#">www.example.com</a></li>
+                        <li><a href="#" class="btn-visit align-self-start">Visit Website</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
 {% endblock %}

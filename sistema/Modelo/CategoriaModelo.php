@@ -21,6 +21,6 @@ class CategoriaModelo extends Modelo
     public function produtos(int $id): ?array
     {
         $busca = (new ProdutoModelo())->busca("categoria_id = {$id}");
-        return $busca->resultado(true);
+        return $busca->ordem('id DESC')->resultado(true);
     }
 }

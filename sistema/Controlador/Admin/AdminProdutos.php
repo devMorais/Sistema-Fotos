@@ -5,6 +5,7 @@ namespace sistema\Controlador\Admin;
 use sistema\Modelo\ProdutoModelo;
 use sistema\Modelo\CategoriaModelo;
 use sistema\Nucleo\Helpers;
+use Verot\Upload\Upload;
 
 /**
  * Classe Controladora de Administração de Produtos
@@ -16,6 +17,8 @@ use sistema\Nucleo\Helpers;
  */
 class AdminProdutos extends AdminControlador
 {
+
+    private string $capa;
 
     /**
      * Listar produtos no painel de administração.
@@ -56,9 +59,10 @@ class AdminProdutos extends AdminControlador
                 $produto->titulo = $dados['titulo'];
                 $produto->texto = $dados['texto'];
                 $produto->status = $dados['status'];
+                $produto->capa = $this->capa ?? null;
 
                 if ($produto->salvar()) {
-                    $this->mensagem->sucesso('Cadastro concluído com êxito.')->flash();
+                    $this->mensagem->sucesso('Cadastrado com sucesso.')->flash();
 
                     Helpers::redirecionar('admin/produtos/listar');
                 } else {
@@ -100,8 +104,17 @@ class AdminProdutos extends AdminControlador
                 $produto->status = $dados['status'];
                 $produto->atualizado_em = date('Y-m-d H:i:s');
 
+                //atualizar a capa no DB e no servidor, se um novo arquivo de imagem for enviado
+                if (!empty($_FILES['capa']['name'])) {
+                    if ($produto->capa && file_exists("uploads/imagens/{$produto->capa}")) {
+                        unlink("uploads/imagens/{$produto->capa}");
+                        unlink("uploads/imagens/thumbs/{$produto->capa}");
+                    }
+                    $produto->capa = $this->capa ?? null;
+                }
+
                 if ($produto->salvar()) {
-                    $this->mensagem->sucesso('Atualização concluída com êxito.')->flash();
+                    $this->mensagem->sucesso('Editado com sucesso.')->flash();
 
                     Helpers::redirecionar('admin/produtos/listar');
                 } else {
@@ -133,7 +146,12 @@ class AdminProdutos extends AdminControlador
                 Helpers::redirecionar('admin/produtos/listar');
             } else {
                 if ($produto->deletar()) {
-                    $this->mensagem->sucesso('Operação de exclusão concluída com êxito.')->flash();
+
+                    if ($produto->capa && file_exists("uploads/imagens/{$produto->capa}")) {
+                        unlink("uploads/imagens/{$produto->capa}");
+                        unlink("uploads/imagens/thumbs/{$produto->capa}");
+                    }
+                    $this->mensagem->sucesso('Deletado com sucesso.')->flash();
                     Helpers::redirecionar('admin/produtos/listar');
                 } else {
                     $this->mensagem->erro($produto->erro())->flash();
@@ -150,13 +168,47 @@ class AdminProdutos extends AdminControlador
      */
     public function validarDados(array $dados): bool
     {
+
         if (empty($dados['titulo'])) {
-            $this->mensagem->alerta('Informe um titulo ao produto')->flash();
+            $this->mensagem->alerta('Escreva um título para o Post!')->flash();
             return false;
         }
         if (empty($dados['texto'])) {
-            $this->mensagem->alerta('Informe a descrição do produto')->flash();
+            $this->mensagem->alerta('Escreva um texto para o Post!')->flash();
             return false;
+        }
+
+        if (!empty($_FILES['capa'])) {
+            $upload = new Upload($_FILES['capa'], 'pt_BR');
+            if ($upload->uploaded) {
+                $titulo = $upload->file_new_name_body = Helpers::slug($dados['titulo']);
+                $upload->jpeg_quality = 90;
+                $upload->image_convert = 'jpg';
+                $upload->process('uploads/imagens/');
+
+                if ($upload->processed) {
+                    // Redimensionar a imagem para miniatura
+                    $this->capa = $upload->file_dst_name;
+                    $upload->file_new_name_body = $titulo;
+                    $upload->image_resize = true;
+                    $upload->image_x = 313;
+                    $upload->image_y = 503;
+                    $upload->jpeg_quality = 90;
+                    $upload->image_convert = 'jpg';
+                    $upload->process('uploads/imagens/thumbs/');
+
+                    if ($upload->processed) {
+                        $this->capa = $upload->file_dst_name;
+
+                        // Agora, você tem a miniatura disponível para exibição na página
+
+                        $upload->clean();
+                    } else {
+                        $this->mensagem->alerta($upload->error)->flash();
+                        return false;
+                    }
+                }
+            }
         }
 
 

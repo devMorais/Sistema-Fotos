@@ -4,3 +4,19 @@
     max-width: 80px
 }
 
+.capaGrande {
+    max-width: 540px
+}
+
+.fundo-cinza {
+  background-color: #ccc; /* Um tom de cinza um pouco mais escuro */
+}
+
+/* O conteúdo branco destacará sobre o fundo cinza */
+.conteudo-branco {
+  color: #ffffff; /* Texto branco */
+}
+
+
+
+

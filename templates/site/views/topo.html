@@ -5,29 +5,23 @@
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
             <i class="bi bi-camera"></i>
-            <h1>ModaPraia</h1>
+            <h1></h1>
         </a>
-
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="{{url()}}" class="active">Home</a></li>
-                <li class="dropdown"><a href="#"><span>Coleções</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <li class="dropdown"><a href="#"><span>COLLECTIONS</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
                         {% for categoria  in categorias %}
                         <li><a href="{{url('categoria/'~categoria.slug)}}">{{categoria.titulo}}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
-                <li><a href="{{url('sobre-nos')}}">Sobre</a></li>
+                <li><a href="{{url('sobre-nos')}}">ABOUT</a></li>
 
-                <li><a href="{{url('contato')}}">Contato</a></li>
+                <li><a href="{{url('contato')}}">CONTACT</a></li>
             </ul>
-
-
-
-
         </nav>
-
         <div class="text-end">
             {% if usuario().level == 3 %}
             <div class="btn-group">
@@ -53,9 +47,7 @@
                     </li>
                 </ul>
             </div>
-
             {% endif %}
-
         </div>
 
         <div class="header-social-links">

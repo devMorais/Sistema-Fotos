@@ -610,7 +610,56 @@ h6 {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #1e1e1e; /* Fundo mais escuro */
+  color: #ffffff; /* Texto em branco para contraste */
+  font-size: 18px; /* Letras maiores */
+}
+
+.sidebar a {
+  color: #ffffff; /* Links em branco para contraste */
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.sidebar a:hover {
+  color: #ffa500; /* Cor de destaque ao passar o mouse (laranja) */
+}
+
+.sidebar h1 {
+  font-size: 24px; /* Título maior */
+  font-weight: bold; /* Título em negrito */
+  color: #ffa500; /* Cor de destaque para o título (laranja) */
+  margin-bottom: 20px; /* Espaçamento inferior para o título */
+}
+
+.sidebar p {
+  line-height: 1.4;
+}
+
+.sidebar button {
+  background-color: #ffa500; /* Cor de destaque para botões (laranja) */
+  color: #1e1e1e; /* Texto em contraste para botões */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.sidebar button:hover {
+  background-color: #ff6600; /* Cor de destaque mais vibrante ao passar o mouse */
+}
+
+/* Estilo para barra de rolagem */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #aab7cf; /* Cor da barra de rolagem */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 @media (max-width: 1199px) {

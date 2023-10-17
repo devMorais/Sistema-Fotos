@@ -36,7 +36,7 @@ class SiteControlador extends Controlador
         $produtos = (new ProdutoModelo())->busca("status = 1");
 
         echo $this->template->renderizar('index.html', [
-            'produtos' => $produtos->resultado(true),
+            'produtos' => $produtos->ordem('id DESC')->limite(25)->resultado(true),
             'categorias' => $this->categorias()
         ]);
     }

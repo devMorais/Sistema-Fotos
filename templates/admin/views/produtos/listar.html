@@ -5,7 +5,7 @@
         <div class="card-body">
             <br>
             <div class="text-end">
-                <a href="{{url('admin/produtos/cadastrar')}}" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Cadastrar</a>
+                <a href="{{url('admin/produtos/cadastrar')}}" class="btn btn-primary"><i class="bi bi-plus"></i> Cadastrar</a>
             </div>
             <h5 class="card-title">Produtos</h5>                               
             <div class="pagetitle">
@@ -31,7 +31,7 @@
             <hr>
             <br>
             <div class="table-responsive">
-                <table class="table table-hover table table-bordered border-primary" id="tabela">
+                <table class="table table-hover table table-bordered border-dark" id="tabela">
                     <thead>
                         <tr>
                             <th>id</th>
@@ -75,7 +75,7 @@
                                 {% endif %}
                             </td>
                             <td class="text-center">
-                                <a href="#info{{post.id}}" data-bs-toggle="offcanvas" tooltip="tooltip" title="Status">
+                                <a href="#info{{produto.id}}" data-bs-toggle="offcanvas" tooltip="tooltip" title="Status">
                                     <i class="fa-solid fa-chart-simple"></i>
                                 </a>
 
@@ -89,15 +89,15 @@
                             </td>
                         </tr>
 
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="info{{post.id}}">
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="info{{produto.id}}">
                         <div class="offcanvas-header">
                             <h5 class="offcanvas-title" id="offcanvasExampleLabel">{{produto.titulo}}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
                             {% if produto.capa %}
-                            <a data-fancybox data-caption="{{post.titulo}}" class="overflow zoom " href="{{url('uploads/imagens/'~produto.capa)}}">
-                                <img src="{{url('uploads/imagens/'~post.capa)}}" />
+                            <a data-fancybox data-caption="{{post.titulo}}" class="overflow zoom" href="{{url('uploads/imagens/'~produto.capa)}}">
+                                <img src="{{url('uploads/imagens/'~produto.capa)}}" />
                             </a>
                             {% endif %}
 
