@@ -13,29 +13,62 @@
                 </nav>
             </div>
             {{ flash() }}
-            <form action="{% if categoria.id %}{{url('admin/categorias/editar/'~categoria.id)}}{%else%}{{url('admin/categorias/cadastrar')}}{%endif%}" method="post" class="row g-3">
+            <form action="{% if categoria.id %}{{url('admin/categorias/editar/'~categoria.id)}}{%else%}{{url('admin/categorias/cadastrar')}}{%endif%}" method="post" enctype="multipart/form-data" class="row g-3">
+
+                <div class="mb-3">
+                    <label for="capa" class="form-label">Insira uma capa para sua coleção:</label>
+                    <input class="form-control" type="file" value="{{categoria.capa}}"  id="capa" name="capa" accept=".png, .jpg, .jpeg">
+                    <div  class="form-text">Essa capa será exibida na página inicial do site, caso opte por ativa.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="url" class="form-label">Insira uma URL de um vídeo de lançamento:</label>
+                    <input type="text" name="url" value="{{categoria.url}}" class="form-control" id="url" aria-describedby="url">
+                    <div  class="form-text">Esse vído será exibido na página inicial do site, caso opte por ativo.</div>
+                </div>
+
                 <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" name="titulo" value="{{categoria.titulo}}" id="titulo" class="form-control">
-                        <label for="titulo">Título</label>
+                    <div class="mb-3">
+                        <label for="capa_ativa" class="form-label text-danger">Capa e vídeo ativo no site?</label>
+                        <select class="form-select" name="capa_ativa">
+                            <option value="1" {% if produto.capa_ativa == '1' %}selected{%endif%}>Sim</option>
+                            <option value="0" {% if produto.capa_ativa == '0' %}selected{%endif%}>Não</option>
+                           
+                        </select>
+                         <div  class="form-text text-info">Se optar por não, será exibido um carousel.</div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-3">
-                        <select name="status" class="form-select" id="status">
+                
+                 <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Defina um status?</label>
+                        <select class="form-select" name="status">
 
                             <option value="1" {% if categoria.status == '1' %}selected{% endif %}>Ativo</option>
                             <option value="0" {% if categoria.status == '0' %}selected{% endif %}>Inativo</option>
                         </select>
-                        <label for="status">Status</label>
+                         <div  class="form-text">Desativado siginifica um rascunho, não terá efeito.</div>
                     </div>
+                     
                 </div>
-                <div class="col-12">
-                    <div class="form-floating">
-                        <textarea name="texto" id="texto" class="form-control" style="height: 100px;">{{categoria.texto}}</textarea>
-                        <label for="texto">Texto</label>
-                    </div>
+
+
+
+                <div class="mb-3">
+                    <label for="url" class="form-label">Defina um titulo para essa coleção:</label>
+                    <input type="text" name="titulo" value="{{categoria.titulo}}" id="titulo" class="form-control">
+                    <div  class="form-text">Essa titulo será exibido na página inicial do site.</div>
                 </div>
+
+                <div class="mb-3">
+                    <label for="url" class="form-label">Defina uma descrição para essa coleção:</label>
+                    <input type="text" name="texto" value="{{categoria.texto}}" id="texto" class="form-control">
+                    <div  class="form-text">Essa descrição será exibida na página inicial do site.</div>
+                </div>
+
+               
+
+
                 <div class="text-center">
                     <button type="submit" class="btn btn-outline-primary">
                         {% if categoria.id %}

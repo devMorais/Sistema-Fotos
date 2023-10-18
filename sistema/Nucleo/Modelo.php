@@ -347,9 +347,9 @@ abstract class Modelo
      * Retorna o ultimo ID da tabela
      * @return int
      */
-    private function ultimoId(): int
+    public function ultimoId():? int
     {
-        return Conexao::getInstancia()->query("SELECT MAX(id) as maximo FROM {$this->tabela}")->fetch()->maximo + 1;
+        return Conexao::getInstancia()->query("SELECT MAX(id) as maximo FROM {$this->tabela}")->fetch()->maximo;
     }
 
     /**
@@ -388,5 +388,4 @@ abstract class Modelo
         $this->ultima_visita_em = date('Y-m-d H:i:s');
         $this->salvar();
     }
-
 }

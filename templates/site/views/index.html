@@ -1,21 +1,55 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<section id="hero" class="d-flex align-items-center" style="background: url('{{url('templates/site/intro/assets/img/hero-bg.jpg')}}') top center;">
+<div class="container">
+    {{flash()}}
+</div>
+{% if capaAtiva == 1 %}
+<section id="hero" class="d-flex align-items-center" style="background: url('{{url('uploads/imagens/'~capa)}}') top center;">
     <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
         <div class="row">
             <div class="col-lg-8">
-                <h1>Welcome to <span>SunSplash Fashion</span></h1>
-                <h2>Your fresh start for beach fashion!</h2>
+                <h1>Welcome to <span>{{titulo}}</span></h1>
+                <h2>{{texto}}</h2>
                 <div class="btns">                   
                 </div>
             </div>
+            {% if video %}
             <div class="col-lg-4 d-flex align-items-center justify-content-center position-relative" data-aos="zoom-in" data-aos-delay="200">
-                <a href="https://www.youtube.com/watch?v=ShjzEckueZU&ab_channel=ChristianDior" class="glightbox play-btn"></a>
+                <a href="{{video}}" class="glightbox play-btn"></a>
             </div>
+            {% endif %}
         </div>
     </div>
 </section>
+{% else %}
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for produto in produtos %}
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %} active {% endif %}" aria-current="true" aria-label="Slide 1"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for produto in produtos %}
+        <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %} {{ random(['animate__animated animate__bounceInUp', 'animate__animated animate__heartBeat', 'animate__animated animate__zoomIn', 'animate__animated animate__zoomInDown']) }}">
+            <img src="{{url('uploads/imagens/'~produto.capa)}}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-dark">{{ produto.titulo }}</h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% endif %}
+
 <main id="main" class="prd" data-aos="fade" data-aos-delay="1500">
     <!-- ======= Gallery Section ======= -->
     <section id="gallery" class="gallery">

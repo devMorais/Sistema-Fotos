@@ -402,7 +402,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "pecee/simple-router": 20,
-        "digitalnature/php-ref": 20
+        "digitalnature/php-ref": 20,
+        "verot/class.upload.php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

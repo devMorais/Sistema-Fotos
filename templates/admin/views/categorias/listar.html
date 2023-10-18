@@ -78,10 +78,10 @@
                         <div class="offcanvas-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    Cadastrado em: {{ categoria.cadastrado_em|date("d/m/Y H:i:s") }}
+                                    Cadastrado: {{ contarTempo(categoria.cadastrado_em)}}
                                 </li>
                                 <li class="list-group-item">
-                                    Atualizado em: {{categoria.atualizado_em}}
+                                    Atualizado: {{contarTempo(categoria.atualizado_em)}}
                                 </li>
                                 <li class="list-group-item">
                                     Última visita em: {{categoria.ultima_visita_em}}
