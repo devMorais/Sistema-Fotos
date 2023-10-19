@@ -8,20 +8,24 @@
     max-width: 540px
 }
 
-.fundo-cinza {
-  background-color: #ccc; /* Um tom de cinza um pouco mais escuro */
+.fundo-azul {
+  background: linear-gradient(to bottom, #b3e0ff, #e6f7ff);
 }
+
 
 /* O conteúdo branco destacará sobre o fundo cinza */
 .conteudo-branco {
-  color: #ffffff; /* Texto branco */
+    color: #ffffff; /* Texto branco */
 }
 
 .tempoCarregamento {
     font-size: .7em;
-    
-   
+    float: right;
+    color: #333; /* Cor do texto (exemplo) */
+    background-color: #fff; /* Cor de fundo (exemplo) */
+    padding: 5px; /* Adicione preenchimento para separar o texto do contêiner */
 }
+
 
 
 

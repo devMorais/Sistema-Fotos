@@ -33,12 +33,15 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
+        //$this->mensagem->informa('Nosso sistema está prestes a ser lançado e está pronto para enfrentar desafios massivos. Com suporte para milhões de dados, estamos prontos para elevar o jogo e impulsionar sua eficiência a níveis extraordinários. Não fique para trás, junte-se a nós e experimente o futuro da velocidade e escalabilidade!')->flash();
+
+
         $produtos = (new ProdutoModelo())->busca("status = 1");
 
         echo $this->template->renderizar('index.html', [
             'produtos' => [
                 'slides' => $produtos->ordem('id DESC')->limite(5)->resultado(true),
-                'produtos' => $produtos->ordem('id DESC')->limite(10)->offset(5)->resultado(true),
+                'produtos' => $produtos->ordem('id DESC')->limite(10000)->offset(5)->resultado(true),
                 'maisLidos' => (new ProdutoModelo())->busca("status = 1")->ordem('visitas DESC')->limite(5)->resultado(true),
             ],
             'categorias' => $this->categorias(),
