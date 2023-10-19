@@ -1,7 +1,10 @@
 
-
 .capaGrande {
     max-width: 540px
+}
+.tempoCarregamento {
+    font-size: .7em;
+   
 }
 
 
@@ -36,10 +39,7 @@ a:hover {
 .capaPequena {
     max-width: 135px
 }
-.tempoCarregamento {
-    font-size: .7em;
-    float: right
-}
+
 
 .overflow {
     position: relative;

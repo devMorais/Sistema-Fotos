@@ -22,7 +22,7 @@ class SiteControlador extends Controlador
      * Retorna uma lista das categorias
      * @return array
      */
-    public function categorias(): ?array
+    public function categorias(): array
     {
         return (new CategoriaModelo())->busca("status = 1 ")->resultado(true);
     }
@@ -33,39 +33,16 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
-        $ultimoId = (new CategoriaModelo())->ultimoId();
+        $produtos = (new ProdutoModelo())->busca("status = 1");
 
-        if (!empty($ultimoId)) {
-
-            $dados = (new CategoriaModelo())->busca("id = {$ultimoId}")->resultado(true);
-            foreach ($dados as $item) {
-                $capaAtiva = $item->capa_ativa;
-                $capaColecao = $item->capa;
-                $videoColecao = $item->url;
-                $tituloColecao = $item->titulo;
-                $textoColecao = $item->texto;
-            }
-
-            $produtos = (new ProdutoModelo())->busca("status = 1");
-
-            echo $this->template->renderizar('index.html', [
-                'produtos' => $produtos->ordem('id DESC')->limite(25)->resultado(true),
-                'categorias' => $this->categorias(),
-                'capa' => $capaColecao,
-                'video' => $videoColecao,
-                'titulo' => $tituloColecao,
-                'texto' => $textoColecao,
-                'capaAtiva' => $capaAtiva
-            ]);
-        } else {
-            $dados = (new CategoriaModelo())->busca("id = {$ultimoId}")->resultado(true);
-            $produtos = (new ProdutoModelo())->busca("status = 1");
-
-            echo $this->template->renderizar('index.html', [
-                'produtos' => $produtos->ordem('id DESC')->limite(25)->resultado(true),
-                'categorias' => $this->categorias(),
-            ]);
-        }
+        echo $this->template->renderizar('index.html', [
+            'produtos' => [
+                'slides' => $produtos->ordem('id DESC')->limite(5)->resultado(true),
+                'produtos' => $produtos->ordem('id DESC')->limite(10)->offset(5)->resultado(true),
+                'maisLidos' => (new ProdutoModelo())->busca("status = 1")->ordem('visitas DESC')->limite(5)->resultado(true),
+            ],
+            'categorias' => $this->categorias(),
+        ]);
     }
 
     /**
@@ -115,19 +92,15 @@ class SiteControlador extends Controlador
     public function categoriaPorId(string $slug): void
     {
         $categoria = (new CategoriaModelo())->buscaPorSlug($slug);
+
         if (!$categoria) {
             Helpers::redirecionar('404');
-        }
-        $produtos = (new CategoriaModelo())->produtos($categoria->id);
-        if (is_null($produtos)) {
-            $this->mensagem->alerta('Não há produtos cadastrado para essa coleção no momento!')->flash();
-            Helpers::redirecionar();
         }
 
         $categoria->salvarVisitas();
 
         echo $this->template->renderizar('categoria.html', [
-            'produtos' => $produtos,
+            'produtos' => (new CategoriaModelo())->produtos($categoria->id),
             'categorias' => $this->categorias()
         ]);
     }

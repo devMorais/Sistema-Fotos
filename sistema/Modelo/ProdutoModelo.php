@@ -15,7 +15,7 @@ class ProdutoModelo extends Modelo
 
     public function __construct()
     {
-        parent::__construct('produtos');
+        parent::__construct('produtos_fake1');
     }
 
     public function categoria(): ?CategoriaModelo

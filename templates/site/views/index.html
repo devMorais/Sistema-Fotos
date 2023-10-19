@@ -4,8 +4,8 @@
 <div class="container">
     {{flash()}}
 </div>
-{% if capaAtiva == 1 %}
-<section id="hero" class="d-flex align-items-center" style="background: url('{{url('uploads/imagens/'~capa)}}') top center;">
+
+<!--<section id="hero" class="d-flex align-items-center" style="background: url('{{url('uploads/imagens/'~capa)}}') top center;">
     <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
         <div class="row">
             <div class="col-lg-8">
@@ -21,20 +21,24 @@
             {% endif %}
         </div>
     </div>
-</section>
-{% else %}
+</section>-->
+
+{% if produtos.slides %}
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-        {% for produto in produtos %}
+        {% for slide in produtos.slides %}
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{loop.index0}}" class="{% if loop.index0 == 0 %} active {% endif %}" aria-current="true" aria-label="Slide 1"></button>
         {% endfor %}
     </div>
     <div class="carousel-inner">
-        {% for produto in produtos %}
+        {% for slide in produtos.slides %}
         <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %} {{ random(['animate__animated animate__bounceInUp', 'animate__animated animate__heartBeat', 'animate__animated animate__zoomIn', 'animate__animated animate__zoomInDown']) }}">
-            <img src="{{url('uploads/imagens/'~produto.capa)}}" class="d-block w-100" alt="...">
+            {% if slide.capa %}
+            <img src="{{url('uploads/imagens/'~slide.capa)}}" class="d-block w-100" alt="...">
+            {% endif %}
             <div class="carousel-caption d-none d-md-block">
-                <h5 class="text-dark">{{ produto.titulo }}</h5>
+                <h5 class="text-dark">{{ slide.titulo }}</h5>
+                <p>{{resumirTexto(slide.texto, 100) |raw}}</p>
             </div>
         </div>
         {% endfor %}
@@ -48,14 +52,17 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    Nenhum slide cadastrado para exibir!
+</div>
 {% endif %}
-
 <main id="main" class="prd" data-aos="fade" data-aos-delay="1500">
     <!-- ======= Gallery Section ======= -->
     <section id="gallery" class="gallery">
         <div class="container-fluid">
             <div class="row gy-4 justify-content-center">
-                {% for produto in produtos %}
+                {% for produto in produtos.produtos %}
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="gallery-item h-100">
                         <img src="{{url('uploads/imagens/thumbs/'~produto.capa)}}" class="img-fluid" alt="">

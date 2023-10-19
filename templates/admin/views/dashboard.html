@@ -51,14 +51,14 @@
                                             <i class="bi bi-box"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{produto.total}}</h6>
+                                            <h6>{{formatarNumero(produtos.total)}}</h6>
 
                                             <div class="row">
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{produto.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{produtos.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{produto.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{produtos.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
                                                 </div>
                                             </div>
 
@@ -91,13 +91,13 @@
 
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{categoria.total}}</h6>
+                                            <h6>{{categorias.total}}</h6>
                                             <div class="row">
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{categoria.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{categorias.categoriasAtiva}}</span> <span class="badge text-secondary">Ativo</span> </span>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{categoria.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{categorias.categoriasInativa}}</span> <span class="badge text-secondary">Inativo</span> </span>  
                                                 </div>
                                             </div>
                                         </div>
@@ -108,7 +108,7 @@
                         </div><!-- End Revenue Card -->
 
                         <!-- Customers Card -->
-                        <div class="col-xxl-3 col-md-6">
+                        <div class="col-xxl-4 col-md-12">
 
                             <div class="card info-card customers-card">
 
@@ -122,63 +122,31 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <h5 class="card-title">Usuários</h5>
+                                    <h5 class="card-title">Administradores</h5>
 
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                             <i class="bi bi-people"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{usuario.total}}</h6>
+                                            <h6>{{usuarios.admin}}</h6>
                                             <div class="row">
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{usuario.ativo}}</span> <span class="badge text-secondary">Ativo</span> </span>
+                                                    <span class="badge text-bg-success bg-opacity-10"> <span class="text-success fw-bold">{{usuarios.adminAtivo}}</span> <span class="badge text-secondary">Ativo</span> </span>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{usuario.inativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
+                                                    <span class="badge text-bg-danger bg-opacity-10"> <span class="text-danger fw-bold">{{usuarios.adminInativo}}</span> <span class="badge text-secondary">Inativo</span> </span>  
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
+
                                 </div>
                             </div>
 
                         </div><!-- End Customers Card -->
 
-                        <div class="col-xxl-3 col-md-6">
-
-
-                            <div class="card info-card customers-card">
-
-                                <div class="card-body">
-                                    <h5 class="card-title">  Últimos Logins </h5>
-
-                                    <div class="d-flex align-items-center">
-
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-clock"></i>
-
-                                        </div>
-                                        {% if usuarios %}
-                                        <div class="ps-3">
-                                            {% for usuario in usuario.login %}
-                                            <small>{{usuario.nome}}</small>
-                                            <br><hr> <!-- Adicione uma quebra de linha aqui -->
-                                            {% endfor %}
-                                        </div>
-                                        {% else %}
-                                        <div class="alert alert-warning" role="alert">
-                                            Nenhum login para exibir!
-                                        </div>
-                                        {% endif %}
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div><!-- End Customers Card -->
 
                         <!-- Recent Sales -->
                         <div class="col-12">
@@ -196,7 +164,7 @@
 
 
                                 <div class="card-body">
-                                    {% if ultimas_categorias %}
+                                    {% if categorias.categorias %}
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
@@ -207,7 +175,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for categoria in ultimas_categorias %}
+                                                {% for categoria in categorias.categorias %}
                                                 <tr>
                                                     <th>
 
@@ -352,7 +320,7 @@
 
 
                         <div class="card-body">
-                            {% if posts.posts %}
+                            {% if produtos.produtos %}
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -363,7 +331,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for produto in posts.posts %}
+                                        {% for produto in produtos.produtos %}
                                         <tr>
                                             <th>
 
@@ -379,12 +347,12 @@
                                                     {{resumirTexto(produto.titulo, 100)}}
                                                 </div>
                                                 <small class="text-muted fw-normal">
-                                                    Cadastrado por {{produto.usuario.nome}} {{ contarTempo(produto.cadastrado_em) }} {{produto.categoria.titulo | upper}}
+                                                    Cadastrado por {{produto.usuario.nome}} {{ contarTempo(produto.cadastrado_em) }} {{produto.categoria.titulo}}
                                                 </small>
 
 
                                             </th>
-                                            <td class="text-center">{{produto.visitas}}</td>
+                                            <td class="text-center">{{formatarNumero(produto.visitas)}}</td>
                                             <td class="text-center">
 
                                                 <a href="{{ url('admin/produtos/editar/'~produto.id) }}" tooltip="tooltip" title="Editar">
