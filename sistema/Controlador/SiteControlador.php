@@ -6,6 +6,7 @@ use sistema\Nucleo\Controlador;
 use sistema\Modelo\ProdutoModelo;
 use sistema\Nucleo\Helpers;
 use sistema\Modelo\CategoriaModelo;
+use sistema\Biblioteca\Paginar;
 
 class SiteControlador extends Controlador
 {
@@ -19,12 +20,12 @@ class SiteControlador extends Controlador
     }
 
     /**
-     * Retorna uma lista das categorias
-     * @return array
+     * Categorias
+     * @return array|null
      */
-    public function categorias(): array
+    public function categorias(): ?array
     {
-        return (new CategoriaModelo())->busca("status = 1 ")->resultado(true);
+        return (new CategoriaModelo())->busca("status = 1")->resultado(true);
     }
 
     /**
@@ -33,15 +34,12 @@ class SiteControlador extends Controlador
      */
     public function index(): void
     {
-        //$this->mensagem->informa('Nosso sistema está prestes a ser lançado e está pronto para enfrentar desafios massivos. Com suporte para milhões de dados, estamos prontos para elevar o jogo e impulsionar sua eficiência a níveis extraordinários. Não fique para trás, junte-se a nós e experimente o futuro da velocidade e escalabilidade!')->flash();
-
-
         $produtos = (new ProdutoModelo())->busca("status = 1");
 
         echo $this->template->renderizar('index.html', [
             'produtos' => [
-                'slides' => $produtos->ordem('id DESC')->limite(5)->resultado(true),
-                'produtos' => $produtos->ordem('id DESC')->limite(10000)->offset(5)->resultado(true),
+                'slides' => $produtos->ordem('id DESC')->limite(3)->resultado(true),
+                'produtos' => $produtos->ordem('id DESC')->limite(4)->offset(3)->resultado(true),
                 'maisLidos' => (new ProdutoModelo())->busca("status = 1")->ordem('visitas DESC')->limite(5)->resultado(true),
             ],
             'categorias' => $this->categorias(),
@@ -70,20 +68,17 @@ class SiteControlador extends Controlador
      * @param string $slug
      * @return void
      */
-    public function produtoPorId(string $slug): void
+    public function produtoPorId(string $categoria, string $slug): void
     {
         $produto = (new ProdutoModelo())->buscaPorSlug($slug);
-
         if (!$produto) {
             Helpers::redirecionar('404');
         }
-
-
         $produto->salvarVisitas();
 
         echo $this->template->renderizar('produto.html', [
             'produto' => $produto,
-            'categorias' => $this->categorias()
+            'categorias' => $this->categorias(),
         ]);
     }
 
@@ -92,43 +87,50 @@ class SiteControlador extends Controlador
      * @param int $id
      * @return void
      */
-    public function categoriaPorId(string $slug): void
+    public function categoriaPorId(string $slug, int $pagina = null): void
     {
         $categoria = (new CategoriaModelo())->buscaPorSlug($slug);
 
         if (!$categoria) {
             Helpers::redirecionar('404');
         }
-
         $categoria->salvarVisitas();
 
+        $produtos = (new ProdutoModelo());
+        $total = $produtos->busca('categoria_id = :c AND status = :s', "c={$categoria->id}&s=1 COUNT(id)", 'id')->total();
+
+        $paginar = new Paginar(Helpers::url('categoria/' . $slug), ($pagina ?? 1), 20, 3, $total);
+
         echo $this->template->renderizar('categoria.html', [
-            'produtos' => (new CategoriaModelo())->produtos($categoria->id),
-            'categorias' => $this->categorias()
+            'produtos' => $produtos->busca("categoria_id = {$categoria->id} AND status = 1")->limite($paginar->limite())->offset($paginar->offset())->resultado(true),
+            'colecao' => $categoria,
+            'paginacao' => $paginar->renderizar(),
+            'paginacaoInfo' => $paginar->info(),
+            'categorias' => $this->categorias(),
         ]);
     }
 
     /**
-     * Método responsável por carregar os dados na pagina sobre
+     * Sobre
      * @return void
      */
     public function sobre(): void
     {
         echo $this->template->renderizar('sobre.html', [
             'titulo' => 'Sobre nós',
-            'categorias' => $this->categorias()
+            'categorias' => $this->categorias(),
         ]);
     }
 
     /**
-     * Método responsável por carregar os dados na pagina erro
+     * ERRO 404
      * @return void
      */
     public function erro404(): void
     {
         echo $this->template->renderizar('404.html', [
             'titulo' => 'Página não encontrada',
-            'categorias' => $this->categorias()
+            'categorias' => $this->categorias(),
         ]);
     }
 

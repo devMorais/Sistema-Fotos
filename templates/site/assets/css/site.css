@@ -7,6 +7,16 @@
    
 }
 
+.pagination>li>a,
+.pagination>li>span {
+    color: #333
+}
+.pagination span.active {
+    background: #555;
+    color: #fff;
+    border: none
+}
+
 
 
 

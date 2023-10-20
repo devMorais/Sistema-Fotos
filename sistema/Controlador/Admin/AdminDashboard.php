@@ -29,15 +29,15 @@ class AdminDashboard extends AdminControlador
         echo $this->template->renderizar('dashboard.html', [
             'produtos' => [
                 'produtos' => $produtos->busca()->ordem('id DESC')->limite(5)->resultado(true),
-                'total' => $produtos->busca(null,'COUNT(id)','id')->total(),
-                'ativo' => $produtos->busca('status = :s','s=1 COUNT(status)','status')->total(),
-                'inativo' => $produtos->busca('status = :s','s=0 COUNT(status)','status')->total()
+                'total' => $produtos->busca(null, 'COUNT(id)', 'id')->total(),
+                'ativo' => $produtos->busca('status = :s', 's=1 COUNT(status)', 'status')->total(),
+                'inativo' => $produtos->busca('status = :s', 's=0 COUNT(status)', 'status')->total()
             ],
             'categorias' => [
                 'categorias' => $categorias->busca()->ordem('id DESC')->limite(5)->resultado(true),
-                'total' => $categorias->busca()->total(),
-                'categoriasAtiva' => $categorias->busca('status = 1')->total(),
-                'categoriasInativa' => $categorias->busca('status = 0')->total(),
+                'total' => $categorias->busca(null, 'COUNT(id)', 'id')->total(),
+                'categoriasAtiva' => $categorias->busca('status = :s', 's=1 COUNT(status)', 'status')->total(),
+                'categoriasInativa' => $categorias->busca('status = :s', 's=0 COUNT(status)', 'status')->total()
             ],
             'usuarios' => [
                 'logins' => $usuarios->busca()->ordem('ultimo_login DESC')->limite(5)->resultado(true),
@@ -63,5 +63,4 @@ class AdminDashboard extends AdminControlador
         $this->mensagem->informa('Você saiu do painel de controle!')->flash();
         Helpers::redirecionar('admin/login');
     }
-
 }

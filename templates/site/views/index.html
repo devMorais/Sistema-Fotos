@@ -4,25 +4,6 @@
 <div class="container">
     {{flash()}}
 </div>
-
-<!--<section id="hero" class="d-flex align-items-center" style="background: url('{{url('uploads/imagens/'~capa)}}') top center;">
-    <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
-        <div class="row">
-            <div class="col-lg-8">
-                <h1>Welcome to <span>{{titulo}}</span></h1>
-                <h2>{{texto}}</h2>
-                <div class="btns">                   
-                </div>
-            </div>
-            {% if video %}
-            <div class="col-lg-4 d-flex align-items-center justify-content-center position-relative" data-aos="zoom-in" data-aos-delay="200">
-                <a href="{{video}}" class="glightbox play-btn"></a>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</section>-->
-
 {% if produtos.slides %}
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -68,7 +49,7 @@
                         <img src="{{url('uploads/imagens/thumbs/'~produto.capa)}}" class="img-fluid" alt="">
                         <div class="gallery-links d-flex align-items-center justify-content-center">
                             <a href="{{url('uploads/imagens/'~produto.capa)}}" title="{{produto.titulo}}" class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
-                            <a href="{{url('produto/'~produto.slug)}}" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                            <a href="{{url('produto/'~produto.categoria.slug~'/'~produto.slug)}}" class="details-link"><i class="bi bi-link-45deg"></i></a>
                             <p></p>
                         </div>
                     </div>
