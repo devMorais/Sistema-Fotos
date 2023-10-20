@@ -34,6 +34,7 @@ try {
         SimpleRouter::match(['get', 'post'], URL_ADMIN . 'produtos/cadastrar', 'AdminProdutos@cadastrar');
         SimpleRouter::match(['get', 'post'], URL_ADMIN . 'produtos/editar/{id}', 'AdminProdutos@editar');
         SimpleRouter::get(URL_ADMIN . 'produtos/deletar/{id}', 'AdminProdutos@deletar');
+        SimpleRouter::get(URL_ADMIN . 'produtos/datatable', 'AdminProdutos@datatable');
 
         //ADMIN CATEGORIAS
         SimpleRouter::get(URL_ADMIN . 'categorias/listar', 'AdminCategorias@listar');

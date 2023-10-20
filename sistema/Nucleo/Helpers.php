@@ -249,7 +249,7 @@ class Helpers
      * @param string $data
      * @return string
      */
-    public static function contarTempo(string $data): string
+    public static function contarTempo(string $data = null): string
     {
         $agora = strtotime(date('Y-m-d H:i:s'));
         $tempo = strtotime($data);

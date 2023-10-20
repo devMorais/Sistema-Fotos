@@ -21,20 +21,79 @@ class AdminProdutos extends AdminControlador
     private string $capa;
 
     /**
-     * Listar produtos no painel de administração.
-     *
-     * Este método recupera uma lista de produtos, a contagem total, a contagem de produtos ativos
-     * e a contagem de produtos inativos, e depois renderiza um modelo para exibir essa informação.
+     * Método responsável por exibir os dados tabulados utilizando o plugin datatables
+     * @return void
+     */
+    public function datatable(): void
+    {
+
+        $datatable = $_REQUEST;
+        $datatable = filter_var_array($datatable, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $limite = $datatable['length'];
+        $offset = $datatable['start'];
+        $busca = $datatable['search']['value'];
+
+        $colunas = [
+            0 => 'id',
+            2 => 'titulo',
+            3 => 'categoria_id',
+            4 => 'visitas',
+            5 => 'status'
+        ];
+
+        $ordem = " " . $colunas[$datatable['order'][0]['column']] . " ";
+        $ordem .= " " . $datatable['order'][0]['dir'] . " ";
+
+        $produtos = new ProdutoModelo();
+
+        if (empty($busca)) {
+            $produtos->busca()->ordem($ordem)->limite($limite)->offset($offset);
+            $total = (new ProdutoModelo())->busca(null, 'COUNT(id)', 'id')->total();
+        } else {
+            $produtos->busca("id LIKE '%{$busca}%' OR titulo LIKE '%{$busca}%' ")->limite($limite)->offset($offset);
+            $total = $produtos->total();
+        }
+
+        $dados = [];
+
+        if ($produtos->resultado(true)) {
+            foreach ($produtos->resultado(true) as $produto) {
+                $dados[] = [
+                    $produto->id,
+                    $produto->capa,
+                    $produto->titulo,
+                    $produto->categoria()->titulo ?? '-----',
+                    Helpers::formatarNumero($produto->visitas),
+                    $produto->status
+                ];
+            }
+        }
+
+
+        $retorno = [
+            "draw" => $datatable['draw'],
+            "recordsTotal" => $total,
+            "recordsFiltered" => $total,
+            "data" => $dados
+        ];
+
+        echo json_encode($retorno);
+    }
+
+    /**
+     * Lista produtos
+     * @return void
      */
     public function listar(): void
     {
-        $produto = new ProdutoModelo();
+        $produtos = new ProdutoModelo();
+
         echo $this->template->renderizar('produtos/listar.html', [
-            'produtos' => $produto->busca()->ordem('status ASC, id DESC')->resultado(true),
             'total' => [
-                'total' => $produto->total(),
-                'ativo' => $produto->busca('status = 1')->total(),
-                'inativo' => $produto->busca('status = 0')->total()
+                'produtos' => 0,
+                'produtosAtivo' => 0,
+                'produtosInativo' => 0,
             ]
         ]);
     }

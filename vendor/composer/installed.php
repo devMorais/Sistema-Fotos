@@ -3,7 +3,7 @@
         'name' => 'ceo/umbug',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '46e3c8854b1a7cfd4d92f5b2828270e76acc30f2',
+        'reference' => '7fcc5b924eda99239f8c85a43ce40e6f515ab85e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'ceo/umbug' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '46e3c8854b1a7cfd4d92f5b2828270e76acc30f2',
+            'reference' => '7fcc5b924eda99239f8c85a43ce40e6f515ab85e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

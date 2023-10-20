@@ -69,7 +69,7 @@ class Template
                             })
             ),
             $this->twig->addFunction(
-                    new \Twig\TwigFunction('contarTempo', function (string $data) {
+                    new \Twig\TwigFunction('contarTempo', function (string $data = null) {
                                 return Helpers::contarTempo($data);
                             })
             ),
